@@ -46,11 +46,11 @@ const templates = computed(() => {
   // eslint-disable-next-line no-console
   console.log('Raw Templates from Store:', rawTemplates);
 
-  // Map templates to ComboBox format
+  // Map templates to ComboBox format - template object as value, name as label
   const mappedTemplates = rawTemplates
     .filter(template => template && template.name)
     .map(template => ({
-      value: template,
+      value: template, // Store the entire template object
       label: template.name,
     }));
 
@@ -79,10 +79,10 @@ const rules = {
 const v$ = useVuelidate(rules, formState);
 
 const selectedTemplateParams = computed(() => {
-  if (!formState.value.template?.value) return [];
+  if (!formState.value.template) return [];
 
   // Get the template body from components
-  const bodyComponent = formState.value.template.value.components?.find(
+  const bodyComponent = formState.value.template.components?.find(
     component => component.type === 'BODY'
   );
 
@@ -103,8 +103,13 @@ const handleSubmit = () => {
   v$.value.$touch();
   if (v$.value.$invalid) return;
 
+  // eslint-disable-next-line no-console
+  console.log('Form state at submit:', formState.value);
+  // eslint-disable-next-line no-console
+  console.log('Template at submit:', formState.value.template);
+
   // Get the template body from components
-  const bodyComponent = formState.value.template.value.components?.find(
+  const bodyComponent = formState.value.template.components?.find(
     component => component.type === 'BODY'
   );
   const templateBody = bodyComponent?.text || '';
@@ -119,8 +124,8 @@ const handleSubmit = () => {
     scheduled_at: new Date(formState.value.scheduledAt).toISOString(),
     campaign_type: 'one_off',
     template_info: {
-      name: formState.value.template.value.name,
-      language: formState.value.template.value.language,
+      name: formState.value.template.name,
+      language: formState.value.template.language,
       body: templateBody,
       params: formState.value.templateParams,
     },
