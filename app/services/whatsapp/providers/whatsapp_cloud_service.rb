@@ -26,11 +26,22 @@ class Whatsapp::Providers::WhatsappCloudService < Whatsapp::Providers::BaseServi
     process_response(response)
   end
 
+  def get_message_templates
+    if Rails.env.development?
+      # In development, we can rely on the templates synced manually via console
+      # to avoid expired token issues during development.
+      return whatsapp_channel.message_templates
+    end
+
+    sync_templates
+    whatsapp_channel.reload.message_templates
+  end
+
   def sync_templates
-    # ensuring that channels with wrong provider config wouldn't keep trying to sync templates
-    whatsapp_channel.mark_message_templates_updated
-    templates = fetch_whatsapp_templates("#{business_account_path}/message_templates?access_token=#{whatsapp_channel.provider_config['api_key']}")
-    whatsapp_channel.update(message_templates: templates, message_templates_last_updated: Time.now.utc) if templates.present?
+    return @inbox.channel.message_templates if Rails.env.development?
+
+    @inbox.channel.sync_message_templates
+    @inbox.channel.message_templates
   end
 
   def fetch_whatsapp_templates(url)

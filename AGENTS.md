@@ -5,7 +5,7 @@
 - **Setup**: `bundle install && pnpm install`
 - **Run Dev**: `pnpm dev` or `overmind start -f ./Procfile.dev`
 - **Lint JS/Vue**: `pnpm eslint` / `pnpm eslint:fix`
-- **Lint Ruby**: `bundle exec rubocop -a`
+- **Lint Ruby**: `q`
 - **Test JS**: `pnpm test` or `pnpm test:watch`
 - **Test Ruby**: `bundle exec rspec spec/path/to/file_spec.rb`
 - **Single Test**: `bundle exec rspec spec/path/to/file_spec.rb:LINE_NUMBER`

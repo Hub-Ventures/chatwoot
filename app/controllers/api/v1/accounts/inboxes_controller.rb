@@ -70,12 +70,8 @@ class Api::V1::Accounts::InboxesController < Api::V1::Accounts::BaseController
   end
 
   def whatsapp_templates
-    if @inbox.inbox_type == 'Whatsapp'
-      templates = @inbox.channel.get_message_templates
-      render json: templates, status: :ok
-    else
-      render json: { error: 'Inbox is not a WhatsApp inbox' }, status: :unprocessable_entity
-    end
+    authorize @inbox
+    @templates = ::Whatsapp::WhatsappTemplatesService.new(inbox: @inbox).get_templates
   end
 
   private

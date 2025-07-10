@@ -36,7 +36,7 @@ watch(
   () => formState.value.inbox,
   async newInbox => {
     if (newInbox) {
-      templates.value = await getWhatsAppTemplates(newInbox.value);
+      templates.value = await getWhatsAppTemplates(newInbox);
     } else {
       templates.value = [];
     }
@@ -74,7 +74,7 @@ const handleSubmit = () => {
 
   const campaignData = {
     title: formState.value.title,
-    inbox_id: formState.value.inbox.value,
+    inbox_id: formState.value.inbox,
     audience: formState.value.audience.map(id => ({
       id,
       type: 'Label',
