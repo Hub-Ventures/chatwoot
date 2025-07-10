@@ -24,6 +24,11 @@ class Whatsapp::Providers::Whatsapp360DialogService < Whatsapp::Providers::BaseS
     process_response(response)
   end
 
+  def get_message_templates
+    sync_templates if whatsapp_channel.message_templates.blank? || whatsapp_channel.message_templates_last_updated < 1.hour.ago
+    whatsapp_channel.message_templates
+  end
+
   def sync_templates
     # ensuring that channels with wrong provider config wouldn't keep trying to sync templates
     whatsapp_channel.mark_message_templates_updated

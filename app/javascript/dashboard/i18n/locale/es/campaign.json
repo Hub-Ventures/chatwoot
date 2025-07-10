@@ -102,9 +102,9 @@
         "CREATE_BUTTON_TEXT": "Crear",
         "FORM": {
           "TITLE": {
-            "LABEL": "Título",
-            "PLACEHOLDER": "Por favor escriba un título para la campaña",
-            "ERROR": "El título es obligatorio"
+            "LABEL": "Título de la campaña",
+            "PLACEHOLDER": "Introduzca un título para su campaña",
+            "ERROR": "El título de la campaña es obligatorio"
           },
           "MESSAGE": {
             "LABEL": "Mensaje",
@@ -112,22 +112,22 @@
             "ERROR": "El mensaje es obligatorio"
           },
           "INBOX": {
-            "LABEL": "Seleccione una bandeja de entrada",
-            "PLACEHOLDER": "Seleccione una bandeja de entrada",
-            "ERROR": "Se requiere buzón de entrada"
+            "LABEL": "Seleccionar bandeja de entrada",
+            "PLACEHOLDER": "Seleccione una bandeja de entrada para enviar desde",
+            "ERROR": "La bandeja de entrada es obligatoria"
           },
           "AUDIENCE": {
             "LABEL": "Audiencia",
-            "PLACEHOLDER": "Seleccione las etiquetas personalizadas",
-            "ERROR": "El público es requerido"
+            "PLACEHOLDER": "Seleccione las etiquetas de cliente a las que dirigirse",
+            "ERROR": "La audiencia es obligatoria"
           },
           "SCHEDULED_AT": {
-            "LABEL": "Programar tiempo",
+            "LABEL": "Hora programada",
             "PLACEHOLDER": "Por favor, seleccione la hora",
-            "ERROR": "El tiempo programado es requerido"
+            "ERROR": "La hora programada es obligatoria"
           },
           "BUTTONS": {
-            "CREATE": "Crear",
+            "CREATE": "Crear campaña",
             "CANCEL": "Cancelar"
           },
           "API": {
@@ -144,6 +144,57 @@
       "API": {
         "SUCCESS_MESSAGE": "Campaña borrada satisfactoriamente",
         "ERROR_MESSAGE": "Se presentó un error. Por favor intente nuevamente."
+      }
+    },
+    "WHATSAPP": {
+      "HEADER_TITLE": "Campañas de WhatsApp",
+      "NEW_CAMPAIGN": "Crear campaña",
+      "EMPTY_STATE": {
+        "TITLE": "No hay campañas de WhatsApp disponibles",
+        "SUBTITLE": "Inicie una campaña de WhatsApp para llegar directamente a sus clientes. Envíe ofertas o haga anuncios con facilidad. Haga clic en 'Crear campaña' para empezar."
+      },
+      "CREATE": {
+        "TITLE": "Crear Campaña de WhatsApp",
+        "FORM": {
+          "TITLE": {
+            "LABEL": "Título de la campaña",
+            "PLACEHOLDER": "Introduzca un título para su campaña",
+            "ERROR": "El título de la campaña es obligatorio"
+          },
+          "INBOX": {
+            "LABEL": "Seleccionar bandeja de entrada",
+            "PLACEHOLDER": "Seleccione una bandeja de entrada para enviar desde",
+            "ERROR": "La bandeja de entrada es obligatoria"
+          },
+          "TEMPLATE": {
+            "LABEL": "Plantilla de WhatsApp",
+            "PLACEHOLDER": "Seleccione una plantilla de WhatsApp",
+            "PARAM_PLACEHOLDER": "Introduzca el valor para {param}",
+            "ERROR": "La plantilla de WhatsApp es obligatoria"
+          },
+          "AUDIENCE": {
+            "LABEL": "Audiencia",
+            "PLACEHOLDER": "Seleccione las etiquetas de cliente a las que dirigirse",
+            "ERROR": "La audiencia es obligatoria"
+          },
+          "SCHEDULED_AT": {
+            "LABEL": "Hora programada",
+            "PLACEHOLDER": "Por favor, seleccione la hora",
+            "ERROR": "La hora programada es obligatoria"
+          },
+          "TEMPLATE_VARIABLES": {
+            "TITLE": "Variables de la plantilla",
+            "SUBTITLE": "Proporcione valores para las variables de su plantilla."
+          },
+          "BUTTONS": {
+            "CREATE": "Crear campaña",
+            "CANCEL": "Cancelar"
+          },
+          "API": {
+            "SUCCESS_MESSAGE": "Campaña de WhatsApp creada con éxito",
+            "ERROR_MESSAGE": "Hubo un error al crear la campaña. Por favor, inténtelo de nuevo."
+          }
+        }
       }
     }
   }

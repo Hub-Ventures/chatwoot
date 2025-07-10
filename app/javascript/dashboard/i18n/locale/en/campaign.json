@@ -102,9 +102,9 @@
         "CREATE_BUTTON_TEXT": "Create",
         "FORM": {
           "TITLE": {
-            "LABEL": "Title",
-            "PLACEHOLDER": "Please enter the title of campaign",
-            "ERROR": "Title is required"
+            "LABEL": "Campaign Title",
+            "PLACEHOLDER": "Enter a title for your campaign",
+            "ERROR": "Campaign title is required"
           },
           "MESSAGE": {
             "LABEL": "Message",
@@ -113,21 +113,21 @@
           },
           "INBOX": {
             "LABEL": "Select Inbox",
-            "PLACEHOLDER": "Select Inbox",
+            "PLACEHOLDER": "Select an inbox to send from",
             "ERROR": "Inbox is required"
           },
           "AUDIENCE": {
             "LABEL": "Audience",
-            "PLACEHOLDER": "Select the customer labels",
+            "PLACEHOLDER": "Select the customer labels to target",
             "ERROR": "Audience is required"
           },
           "SCHEDULED_AT": {
-            "LABEL": "Scheduled time",
+            "LABEL": "Scheduled Time",
             "PLACEHOLDER": "Please select the time",
             "ERROR": "Scheduled time is required"
           },
           "BUTTONS": {
-            "CREATE": "Create",
+            "CREATE": "Create campaign",
             "CANCEL": "Cancel"
           },
           "API": {
@@ -145,6 +145,58 @@
         "SUCCESS_MESSAGE": "Campaign deleted successfully",
         "ERROR_MESSAGE": "There was an error. Please try again."
       }
-    }
+    },
+    "WHATSAPP": {
+      "HEADER_TITLE": "WhatsApp Campaigns",
+      "NEW_CAMPAIGN": "Create campaign",
+      "EMPTY_STATE": {
+        "TITLE": "No WhatsApp campaigns are available",
+        "SUBTITLE": "Launch a WhatsApp campaign to reach your customers directly. Send offers or make announcements with ease. Click 'Create campaign' to get started."
+      },
+      "CREATE": {
+        "TITLE": "Create WhatsApp Campaign",
+        "FORM": {
+          "TITLE": {
+            "LABEL": "Campaign Title",
+            "PLACEHOLDER": "Enter a title for your campaign",
+            "ERROR": "Campaign title is required"
+          },
+          "INBOX": {
+            "LABEL": "Select Inbox",
+            "PLACEHOLDER": "Select an inbox to send from",
+            "ERROR": "Inbox is required"
+          },
+          "TEMPLATE": {
+            "LABEL": "WhatsApp Template",
+            "PLACEHOLDER": "Select a WhatsApp template",
+            "PARAM_PLACEHOLDER": "Enter value for {param}",
+            "ERROR": "WhatsApp template is required"
+          },
+          "AUDIENCE": {
+            "LABEL": "Audience",
+            "PLACEHOLDER": "Select the customer labels to target",
+            "ERROR": "Audience is required"
+          },
+          "SCHEDULED_AT": {
+            "LABEL": "Scheduled Time",
+            "PLACEHOLDER": "Please select the time",
+            "ERROR": "Scheduled time is required"
+          },
+          "TEMPLATE_VARIABLES": {
+            "TITLE": "Template Variables",
+            "SUBTITLE": "Provide values for the variables in your template."
+          },
+          "BUTTONS": {
+            "CREATE": "Create campaign",
+            "CANCEL": "Cancel"
+          },
+          "API": {
+            "SUCCESS_MESSAGE": "WhatsApp campaign created successfully",
+            "ERROR_MESSAGE": "There was an error creating the campaign. Please try again."
+          }
+        }
+      }
+    },
+    "ADD_BUTTON_TEXT": "Add Campaign"
   }
 }
