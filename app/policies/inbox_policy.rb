@@ -38,10 +38,6 @@ class InboxPolicy < ApplicationPolicy
     @account_user.administrator?
   end
 
-  def whatsapp_templates?
-    @account_user.administrator? || @account_user.agent?
-  end
-
   def create?
     @account_user.administrator?
   end

@@ -178,7 +178,6 @@ Rails.application.routes.draw do
           resources :inboxes, only: [:index, :show, :create, :update, :destroy] do
             get :assignable_agents, on: :member
             get :campaigns, on: :member
-            get :whatsapp_templates, on: :member
             delete :avatar, on: :member
             post :set_agent_bot, on: :member
             get :agent_bot, on: :member

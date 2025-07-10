@@ -5,7 +5,6 @@ import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 import { useMapGetter } from 'dashboard/composables/store';
 import { useMessageFormatter } from 'shared/composables/useMessageFormatter';
-import { getWhatsAppTemplates } from 'dashboard/helper/whatsapp';
 import Input from 'dashboard/components-next/input/Input.vue';
 import Button from 'dashboard/components-next/button/Button.vue';
 import ComboBox from 'dashboard/components-next/combobox/ComboBox.vue';
@@ -30,16 +29,17 @@ const formState = ref({
   templateParams: {},
 });
 
-const templates = ref([]);
+const templates = computed(() => {
+  if (!formState.value.inbox) return [];
+  const selectedInbox = whatsappInboxes.value.find(
+    inbox => inbox.id === formState.value.inbox
+  );
+  return selectedInbox?.channel?.message_templates ?? [];
+});
 
 watch(
   () => formState.value.inbox,
-  async newInbox => {
-    if (newInbox) {
-      templates.value = await getWhatsAppTemplates(newInbox);
-    } else {
-      templates.value = [];
-    }
+  () => {
     formState.value.template = null;
     formState.value.templateParams = {};
   }

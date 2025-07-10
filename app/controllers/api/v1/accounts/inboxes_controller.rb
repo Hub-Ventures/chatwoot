@@ -69,11 +69,6 @@ class Api::V1::Accounts::InboxesController < Api::V1::Accounts::BaseController
     render status: :ok, json: { message: I18n.t('messages.inbox_deletetion_response') }
   end
 
-  def whatsapp_templates
-    authorize @inbox
-    @templates = ::Whatsapp::WhatsappTemplatesService.new(inbox: @inbox).get_templates
-  end
-
   private
 
   def fetch_inbox

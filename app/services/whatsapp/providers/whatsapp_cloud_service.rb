@@ -38,10 +38,10 @@ class Whatsapp::Providers::WhatsappCloudService < Whatsapp::Providers::BaseServi
   end
 
   def sync_templates
-    return @inbox.channel.message_templates if Rails.env.development?
+    return @whatsapp_channel.message_templates if Rails.env.development?
 
-    @inbox.channel.sync_message_templates
-    @inbox.channel.message_templates
+    @whatsapp_channel.sync_message_templates
+    @whatsapp_channel.message_templates
   end
 
   def fetch_whatsapp_templates(url)
