@@ -3,7 +3,7 @@ import { ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
-import { useMapGetter } from 'dashboard/composables/store';
+import { useMapGetter, useStore } from 'dashboard/composables/store';
 import { useMessageFormatter } from 'shared/composables/useMessageFormatter';
 import Input from 'dashboard/components-next/input/Input.vue';
 import Button from 'dashboard/components-next/button/Button.vue';
@@ -14,6 +14,7 @@ const emit = defineEmits(['submit', 'cancel']);
 
 const { t } = useI18n();
 const { formatMessage } = useMessageFormatter();
+const store = useStore();
 
 const whatsappInboxes = useMapGetter('inboxes/getWhatsappInboxes');
 const labels = useMapGetter('labels/getLabels');
@@ -31,10 +32,32 @@ const formState = ref({
 
 const templates = computed(() => {
   if (!formState.value.inbox) return [];
-  const selectedInbox = whatsappInboxes.value.find(
-    inbox => inbox.id === formState.value.inbox
+
+  // eslint-disable-next-line no-console
+  console.log('Selected inbox ID:', formState.value.inbox);
+  // eslint-disable-next-line no-console
+  console.log('Available WhatsApp inboxes:', whatsappInboxes.value);
+
+  // Use the proper getter from the store to get WhatsApp templates
+  const rawTemplates = store.getters['inboxes/getWhatsAppTemplates'](
+    formState.value.inbox
   );
-  return selectedInbox?.channel?.message_templates ?? [];
+
+  // eslint-disable-next-line no-console
+  console.log('Raw Templates from Store:', rawTemplates);
+
+  // Map templates to ComboBox format
+  const mappedTemplates = rawTemplates
+    .filter(template => template && template.name)
+    .map(template => ({
+      value: template,
+      label: template.name,
+    }));
+
+  // eslint-disable-next-line no-console
+  console.log('Mapped Templates:', mappedTemplates);
+
+  return mappedTemplates;
 });
 
 watch(
@@ -56,8 +79,16 @@ const rules = {
 const v$ = useVuelidate(rules, formState);
 
 const selectedTemplateParams = computed(() => {
-  if (!formState.value.template) return [];
-  const message = formState.value.template.body;
+  if (!formState.value.template?.value) return [];
+
+  // Get the template body from components
+  const bodyComponent = formState.value.template.value.components?.find(
+    component => component.type === 'BODY'
+  );
+
+  if (!bodyComponent?.text) return [];
+
+  const message = bodyComponent.text;
   const regex = /\{\{([1-9])\}\}/g;
   let match;
   const params = new Set();
@@ -72,6 +103,12 @@ const handleSubmit = () => {
   v$.value.$touch();
   if (v$.value.$invalid) return;
 
+  // Get the template body from components
+  const bodyComponent = formState.value.template.value.components?.find(
+    component => component.type === 'BODY'
+  );
+  const templateBody = bodyComponent?.text || '';
+
   const campaignData = {
     title: formState.value.title,
     inbox_id: formState.value.inbox,
@@ -82,15 +119,12 @@ const handleSubmit = () => {
     scheduled_at: new Date(formState.value.scheduledAt).toISOString(),
     campaign_type: 'one_off',
     template_info: {
-      name: formState.value.template.name,
-      language: formState.value.template.language,
-      body: formState.value.template.body,
+      name: formState.value.template.value.name,
+      language: formState.value.template.value.language,
+      body: templateBody,
       params: formState.value.templateParams,
     },
-    message: formatMessage(
-      formState.value.template.body,
-      formState.value.templateParams
-    ),
+    message: formatMessage(templateBody, formState.value.templateParams),
   };
   emit('submit', campaignData);
 };
@@ -148,8 +182,6 @@ const inboxOptions = computed(() =>
         <ComboBox
           v-model="formState.template"
           :options="templates"
-          label-key="name"
-          value-key="name"
           :has-error="v$.template.$error"
           :placeholder="t('CAMPAIGN.WHATSAPP.CREATE.FORM.TEMPLATE.PLACEHOLDER')"
           :message="
