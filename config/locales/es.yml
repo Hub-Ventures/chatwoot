@@ -83,6 +83,17 @@ es:
       no_contacts_found: 'No se encontraron contactos para la audiencia seleccionada'
       too_many_failures: 'Campaña detenida debido a demasiados errores'
       timeout_error: 'La campaña agotó el tiempo de espera después de %{duration}'
+    jobs:
+      whatsapp_campaign:
+        skipping_completed: 'Omitiendo job para campaña ya completada %{campaign_id}'
+        skipping_inactive_account: 'Omitiendo job para cuenta inactiva %{account_id}'
+        contact_limit_exceeded: 'Campaña %{campaign_id} excede límite de contactos (%{count} > %{limit})'
+        delivery_failed: 'Fallo de entrega WhatsApp para contacto %{contact_id} en campaña %{campaign_id}: %{error}'
+        record_not_found: 'Registro no encontrado para contacto %{contact_id} en campaña %{campaign_id}: %{error}'
+        unexpected_error: 'Error inesperado para contacto %{contact_id} en campaña %{campaign_id}: %{error}'
+        completed: 'Campaña %{campaign_id} completada: %{successful} exitosos, %{failed} fallidos'
+        timeout: 'Campaña %{campaign_id} agotó tiempo de espera después de %{duration}'
+        failed: 'Campaña %{campaign_id} falló con error inesperado: %{error}'
 
   activerecord:
     errors:
@@ -279,7 +290,7 @@ es:
   captain:
     copilot_message_required: El mensaje es obligatorio
     copilot_error: 'Conecte un asistente a esta bandeja de entrada para utilizar Copilot'
-    copilot_limit: 'Te quedaste sin créditos de Copilot. Puedes comprar más créditos desde la sección de facturación.'
+    copilot_limit: 'Te quedasta sin créditos de Copilot. Puedes comprar más créditos desde la sección de facturación.'
     copilot:
       using_tool: 'Using tool %{function_name}'
       completed_tool_call: 'Completed %{function_name} tool call'

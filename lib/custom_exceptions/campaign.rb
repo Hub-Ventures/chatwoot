@@ -76,4 +76,16 @@ module CustomExceptions::Campaign
       }
     end
   end
+
+  class InvalidTemplate < CustomExceptions::Base
+    def message
+      I18n.t('errors.campaign.invalid_template')
+    end
+  end
+
+  class MessageDeliveryFailed < CustomExceptions::Base
+    def message
+      I18n.t('errors.campaign.message_delivery_failed')
+    end
+  end
 end

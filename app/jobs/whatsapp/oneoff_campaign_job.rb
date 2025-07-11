@@ -1,19 +1,20 @@
 class Whatsapp::OneoffCampaignJob < ApplicationJob
   queue_as :low
 
-  # Limit processing time to prevent runaway jobs
+  # Job configuration constants
   PROCESSING_TIMEOUT = 30.minutes
   MAX_CONTACTS_PER_CAMPAIGN = 10_000
+  BATCH_SIZE = 100
 
-  # Retry on specific errors, not all errors
+  # Retry on specific database errors
   retry_on ActiveRecord::Deadlocked, wait: 2.seconds, attempts: 3
   retry_on ActiveRecord::ConnectionNotEstablished, wait: 5.seconds, attempts: 2
 
   def perform(campaign)
-    # Validate campaign state at job execution time
+    # Early validation - return silently if invalid
     return unless campaign_valid_for_execution?(campaign)
 
-    # Set processing timeout
+    # Execute with timeout protection
     Timeout.timeout(PROCESSING_TIMEOUT) do
       execute_campaign(campaign)
     end
@@ -27,12 +28,12 @@ class Whatsapp::OneoffCampaignJob < ApplicationJob
 
   def campaign_valid_for_execution?(campaign)
     if campaign.completed?
-      Rails.logger.warn "Skipping job for already completed campaign #{campaign.id}"
+      Rails.logger.warn I18n.t('errors.jobs.whatsapp_campaign.skipping_completed', campaign_id: campaign.id)
       return false
     end
 
     unless campaign.account&.active?
-      Rails.logger.warn "Skipping job for inactive account #{campaign.account_id}"
+      Rails.logger.warn I18n.t('errors.jobs.whatsapp_campaign.skipping_inactive_account', account_id: campaign.account_id)
       return false
     end
 
@@ -40,60 +41,98 @@ class Whatsapp::OneoffCampaignJob < ApplicationJob
   end
 
   def execute_campaign(campaign)
-    success_count = 0
-    error_count = 0
-
     service = Whatsapp::OneoffWhatsappCampaignService.new(campaign: campaign)
     contacts = service.audience_contacts
 
-    # Check contact limit
-    if contacts.count > MAX_CONTACTS_PER_CAMPAIGN
-      Rails.logger.error "Campaign #{campaign.id} exceeds contact limit (#{contacts.count} > #{MAX_CONTACTS_PER_CAMPAIGN})"
-      campaign.update!(campaign_status: :active) # Keep as active but don't process
-      return
-    end
+    # Safety check: prevent campaigns with too many contacts
+    enforce_contact_limit(campaign, contacts)
 
-    contacts.find_each(batch_size: 100) do |contact|
-      send_message_with_specific_error_handling(service, contact, campaign)
-      success_count += 1
-    rescue WhatsappCommunicationError => e
-      error_count += 1
-      Rails.logger.warn "WhatsApp delivery failed for contact #{contact.id} in campaign #{campaign.id}: #{e.message}"
-    rescue ActiveRecord::RecordNotFound => e
-      error_count += 1
-      Rails.logger.warn "Record not found for contact #{contact.id} in campaign #{campaign.id}: #{e.message}"
-    rescue StandardError => e
-      error_count += 1
-      Rails.logger.error "Unexpected error for contact #{contact.id} in campaign #{campaign.id}: #{e.message}"
+    # Process contacts efficiently
+    stats = process_all_contacts(service, contacts, campaign)
 
-      # If we get too many unexpected errors, stop the campaign
-      if error_count > success_count && error_count > 10
-        Rails.logger.error "Too many errors in campaign #{campaign.id}, stopping execution"
-        break
-      end
-    end
-
-    Rails.logger.info "Campaign #{campaign.id} completed: #{success_count} successful, #{error_count} failed"
-    campaign.completed! if success_count > 0 || error_count == 0
+    # Log completion and mark campaign as done
+    finalize_campaign(campaign, stats)
   end
 
-  def send_message_with_specific_error_handling(service, contact, _campaign)
+  def enforce_contact_limit(campaign, contacts)
+    contact_count = contacts.count
+    return unless contact_count > MAX_CONTACTS_PER_CAMPAIGN
+
+    error_message = I18n.t('errors.jobs.whatsapp_campaign.contact_limit_exceeded',
+                           campaign_id: campaign.id, count: contact_count, limit: MAX_CONTACTS_PER_CAMPAIGN)
+    Rails.logger.error error_message
+    raise CustomExceptions::Campaign::TooManyContacts, error_message
+  end
+
+  def process_all_contacts(service, contacts, campaign)
+    success_count = 0
+    error_count = 0
+
+    contacts.find_each(batch_size: BATCH_SIZE) do |contact|
+      success_count += process_single_contact(service, contact, campaign)
+    rescue StandardError => e
+      error_count += 1
+      log_contact_error(contact, campaign, e)
+
+      # Circuit breaker: stop if too many errors
+      break if should_stop_processing?(success_count, error_count)
+    end
+
+    { successful: success_count, failed: error_count }
+  end
+
+  def process_single_contact(service, contact, campaign)
     service.send_template_message_to_contact(contact)
+    1 # Return 1 for successful processing
+  rescue CustomExceptions::Campaign::MessageDeliveryFailed => e
+    log_contact_error(contact, campaign, e, 'WhatsApp delivery failed')
+    0
+  rescue ActiveRecord::RecordNotFound => e
+    log_contact_error(contact, campaign, e, 'Record not found')
+    0
+  rescue StandardError => e
+    log_contact_error(contact, campaign, e, 'Unexpected error')
+    0
+  end
+
+  def log_contact_error(contact, campaign, error, error_type = 'Error')
+    case error_type
+    when 'WhatsApp delivery failed'
+      Rails.logger.warn I18n.t('errors.jobs.whatsapp_campaign.delivery_failed',
+                               contact_id: contact.id, campaign_id: campaign.id, error: error.message)
+    when 'Record not found'
+      Rails.logger.warn I18n.t('errors.jobs.whatsapp_campaign.record_not_found',
+                               contact_id: contact.id, campaign_id: campaign.id, error: error.message)
+    else
+      Rails.logger.error I18n.t('errors.jobs.whatsapp_campaign.unexpected_error',
+                                contact_id: contact.id, campaign_id: campaign.id, error: error.message)
+    end
+  end
+
+  def should_stop_processing?(success_count, error_count)
+    # Stop if we have too many errors compared to successes
+    error_count > success_count && error_count > 10
+  end
+
+  def finalize_campaign(campaign, stats)
+    Rails.logger.info I18n.t('errors.jobs.whatsapp_campaign.completed',
+                             campaign_id: campaign.id, successful: stats[:successful], failed: stats[:failed])
+
+    # Mark as completed if we had any success or no errors at all
+    campaign.completed! if stats[:successful] > 0 || stats[:failed] == 0
   end
 
   def handle_timeout_error(campaign)
-    Rails.logger.error "Campaign #{campaign.id} timed out after #{PROCESSING_TIMEOUT} seconds"
+    Rails.logger.error I18n.t('errors.jobs.whatsapp_campaign.timeout',
+                              campaign_id: campaign.id, duration: PROCESSING_TIMEOUT)
     # Don't mark as completed, it can be retried later
   end
 
   def handle_unexpected_error(campaign, error)
-    Rails.logger.error "Campaign #{campaign.id} failed with unexpected error: #{error.message}"
+    Rails.logger.error I18n.t('errors.jobs.whatsapp_campaign.failed',
+                              campaign_id: campaign.id, error: error.message)
     Rails.logger.error error.backtrace.join("\n")
 
-    # Don't mark as completed on unexpected errors
-    # This allows manual investigation and potential retry
+    # Don't mark as completed on unexpected errors - allows manual investigation
   end
 end
-
-# Custom error for WhatsApp communication issues
-class WhatsappCommunicationError < StandardError; end

@@ -97,7 +97,17 @@ en:
       no_contacts_found: 'No contacts found for the selected audience'
       too_many_failures: 'Campaign stopped due to too many failures'
       timeout_error: 'Campaign timed out after %{duration}'
-
+    jobs:
+      whatsapp_campaign:
+        skipping_completed: 'Skipping job for already completed campaign %{campaign_id}'
+        skipping_inactive_account: 'Skipping job for inactive account %{account_id}'
+        contact_limit_exceeded: 'Campaign %{campaign_id} exceeds contact limit (%{count} > %{limit})'
+        delivery_failed: 'WhatsApp delivery failed for contact %{contact_id} in campaign %{campaign_id}: %{error}'
+        record_not_found: 'Record not found for contact %{contact_id} in campaign %{campaign_id}: %{error}'
+        unexpected_error: 'Unexpected error for contact %{contact_id} in campaign %{campaign_id}: %{error}'
+        completed: 'Campaign %{campaign_id} completed: %{successful} successful, %{failed} failed'
+        timeout: 'Campaign %{campaign_id} timed out after %{duration}'
+        failed: 'Campaign %{campaign_id} failed with unexpected error: %{error}'
   activerecord:
     errors:
       models:

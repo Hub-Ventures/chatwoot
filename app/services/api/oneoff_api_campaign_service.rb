@@ -17,12 +17,14 @@ class Api::OneoffApiCampaignService
     # Return empty relation if no audience
     return campaign.account.contacts.none if campaign.audience.blank?
 
-    # Filter by account_id for security and only include contacts with contact_inbox for this inbox
-    label_ids = campaign.audience.map { |label| label['id'] } # rubocop:disable Rails/Pluck
+    # Get label IDs from audience and convert to label titles (like SMS service)
+    audience_label_ids = campaign.audience.select { |audience| audience['type'] == 'Label' }.pluck('id')
+    audience_labels = campaign.account.labels.where(id: audience_label_ids).pluck(:title)
 
+    # Find contacts tagged with any of the audience labels AND have contact_inbox for this inbox
     campaign.account.contacts
-            .joins(:labels, :contact_inboxes)
-            .where(labels: { id: label_ids })
+            .tagged_with(audience_labels, any: true)
+            .joins(:contact_inboxes)
             .where(contact_inboxes: { inbox_id: campaign.inbox_id })
             .distinct
   end
