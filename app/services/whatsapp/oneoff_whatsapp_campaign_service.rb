@@ -1,5 +1,9 @@
 class Whatsapp::OneoffWhatsappCampaignService
-  pattr_initialize [:campaign!]
+  attr_reader :campaign
+
+  def initialize(campaign)
+    @campaign = campaign
+  end
 
   def perform
     # TODO: We should ideally be doing this in a background job
@@ -23,30 +27,51 @@ class Whatsapp::OneoffWhatsappCampaignService
     contact_inbox = contact.contact_inboxes.find_by(inbox_id: campaign.inbox_id)
     return unless contact_inbox
 
-    # This is a placeholder for the actual template sending logic.
-    # We need to construct the `template_params` from the campaign details.
-    # For now, let's assume the message builder can handle it.
+    conversation = find_or_create_conversation(contact_inbox)
+
     builder = Messages::MessageBuilder.new(
-      campaign.sender,
-      contact_inbox.conversations.last, # This might need a better way to find/create conversation
+      campaign.sender, # This could be nil for automated campaigns
+      conversation,
       message_params
     )
     builder.perform
   end
 
+  def find_or_create_conversation(contact_inbox)
+    # Find an existing open conversation or create a new one
+    conversation = contact_inbox.conversations.where.not(status: :resolved).last
+
+    return conversation if conversation
+
+    # Create a new conversation if none exists
+    Conversation.create!(
+      account_id: campaign.account_id,
+      inbox_id: campaign.inbox_id,
+      contact_id: contact_inbox.contact_id,
+      contact_inbox_id: contact_inbox.id,
+      status: :open
+    )
+  end
+
   def message_params
     {
-      content: campaign.message, # This will be replaced by template info
+      content: campaign.message,
       private: false,
       message_type: :template,
-      additional_attributes: {
-        template_params: {
-          name: campaign.message, # We'll get this from the UI
-          namespace: 'whatsapp_template_namespace', # This needs to be stored or fetched
-          language: 'en', # This needs to be stored or fetched
-          processed_params: campaign.template_params # This should come from the UI
-        }
-      }
+      template_params: build_template_params
     }
+  end
+
+  def build_template_params
+    params = {
+      name: campaign.template_info['name'],
+      language: campaign.template_info['language'],
+      processed_params: campaign.template_info['processed_params']
+    }
+
+    # Only add namespace if it exists (required by some providers like 360Dialog)
+    params[:namespace] = campaign.template_info['namespace'] if campaign.template_info['namespace'].present?
+
+    params
   end
 end
