@@ -32,21 +32,21 @@ RSpec.describe Whatsapp::OneoffCampaignJob, type: :job do
            template_info: template_info)
   end
 
-  let!(:contact_with_label1) do
+  let(:contact_with_label1) do
     contact = create(:contact, account: account, name: 'Contact 1')
     create(:contact_inbox, contact: contact, inbox: whatsapp_inbox)
     contact.update_labels([label1.title])
     contact
   end
 
-  let!(:contact_with_label2) do
+  let(:contact_with_label2) do
     contact = create(:contact, account: account, name: 'Contact 2')
     create(:contact_inbox, contact: contact, inbox: whatsapp_inbox)
     contact.update_labels([label2.title])
     contact
   end
 
-  let!(:contact_without_labels) do
+  let(:contact_without_labels) do
     contact = create(:contact, account: account, name: 'Contact 3')
     create(:contact_inbox, contact: contact, inbox: whatsapp_inbox)
     contact
@@ -55,8 +55,8 @@ RSpec.describe Whatsapp::OneoffCampaignJob, type: :job do
   describe '#perform' do
     context 'when campaign is valid' do
       it 'processes all contacts with matching labels' do
-        service_mock = double('WhatsappCampaignService')
-        contacts_mock = double('ContactsRelation')
+        service_mock = instance_double(Whatsapp::OneoffWhatsappCampaignService)
+        contacts_mock = instance_double(ActiveRecord::Relation)
 
         allow(Whatsapp::OneoffWhatsappCampaignService).to receive(:new).and_return(service_mock)
         allow(service_mock).to receive(:audience_contacts).and_return(contacts_mock)
@@ -71,22 +71,8 @@ RSpec.describe Whatsapp::OneoffCampaignJob, type: :job do
       end
 
       it 'marks campaign as completed after processing' do
-        service_mock = double('WhatsappCampaignService')
-        contacts_mock = double('ContactsRelation')
-
-        allow(Whatsapp::OneoffWhatsappCampaignService).to receive(:new).and_return(service_mock)
-        allow(service_mock).to receive(:audience_contacts).and_return(contacts_mock)
-        allow(contacts_mock).to receive(:count).and_return(0)
-        allow(contacts_mock).to receive(:find_each).with(batch_size: 100)
-
-        expect(campaign).to receive(:completed!)
-
-        job.perform(campaign)
-      end
-
-      it 'handles empty audience gracefully' do
-        service_mock = double('WhatsappCampaignService')
-        contacts_mock = double('ContactsRelation')
+        service_mock = instance_double(Whatsapp::OneoffWhatsappCampaignService)
+        contacts_mock = instance_double(ActiveRecord::Relation)
 
         allow(Whatsapp::OneoffWhatsappCampaignService).to receive(:new).and_return(service_mock)
         allow(service_mock).to receive(:audience_contacts).and_return(contacts_mock)
@@ -100,7 +86,7 @@ RSpec.describe Whatsapp::OneoffCampaignJob, type: :job do
 
       it 'processes each contact individually' do
         service_instance = instance_double(Whatsapp::OneoffWhatsappCampaignService)
-        contacts_mock = double('ContactsRelation')
+        contacts_mock = instance_double(ActiveRecord::Relation)
 
         allow(Whatsapp::OneoffWhatsappCampaignService).to receive(:new).and_return(service_instance)
         allow(service_instance).to receive(:audience_contacts).and_return(contacts_mock)
@@ -116,7 +102,9 @@ RSpec.describe Whatsapp::OneoffCampaignJob, type: :job do
 
     context 'when campaign validation fails' do
       it 'handles InvalidCampaign exception' do
-        allow_any_instance_of(Whatsapp::OneoffWhatsappCampaignService).to receive(:audience_contacts)
+        service_mock = instance_double(Whatsapp::OneoffWhatsappCampaignService)
+        allow(Whatsapp::OneoffWhatsappCampaignService).to receive(:new).and_return(service_mock)
+        allow(service_mock).to receive(:audience_contacts)
           .and_raise(CustomExceptions::Campaign::InvalidCampaign)
 
         expect do
@@ -130,7 +118,9 @@ RSpec.describe Whatsapp::OneoffCampaignJob, type: :job do
       it 'handles AlreadyCompleted exception' do
         campaign.update!(campaign_status: :completed)
 
-        allow_any_instance_of(Whatsapp::OneoffWhatsappCampaignService).to receive(:audience_contacts)
+        service_mock = instance_double(Whatsapp::OneoffWhatsappCampaignService)
+        allow(Whatsapp::OneoffWhatsappCampaignService).to receive(:new).and_return(service_mock)
+        allow(service_mock).to receive(:audience_contacts)
           .and_raise(CustomExceptions::Campaign::AlreadyCompleted)
 
         expect do
@@ -141,7 +131,9 @@ RSpec.describe Whatsapp::OneoffCampaignJob, type: :job do
       it 'handles MissingAudience exception' do
         campaign.update!(audience: nil)
 
-        allow_any_instance_of(Whatsapp::OneoffWhatsappCampaignService).to receive(:audience_contacts)
+        service_mock = instance_double(Whatsapp::OneoffWhatsappCampaignService)
+        allow(Whatsapp::OneoffWhatsappCampaignService).to receive(:new).and_return(service_mock)
+        allow(service_mock).to receive(:audience_contacts)
           .and_raise(CustomExceptions::Campaign::MissingAudience)
 
         expect do
@@ -150,9 +142,11 @@ RSpec.describe Whatsapp::OneoffCampaignJob, type: :job do
       end
 
       it 'handles MissingMessage exception' do
-        campaign.update_column(:message, '')
+        campaign.update_column(:message, '') # rubocop:disable Rails/SkipsModelValidations
 
-        allow_any_instance_of(Whatsapp::OneoffWhatsappCampaignService).to receive(:audience_contacts)
+        service_mock = instance_double(Whatsapp::OneoffWhatsappCampaignService)
+        allow(Whatsapp::OneoffWhatsappCampaignService).to receive(:new).and_return(service_mock)
+        allow(service_mock).to receive(:audience_contacts)
           .and_raise(CustomExceptions::Campaign::MissingMessage)
 
         expect do
@@ -164,7 +158,7 @@ RSpec.describe Whatsapp::OneoffCampaignJob, type: :job do
     context 'when individual contact processing fails' do
       it 'continues processing other contacts when one fails' do
         service_instance = instance_double(Whatsapp::OneoffWhatsappCampaignService)
-        contacts_mock = double('ContactsRelation')
+        contacts_mock = instance_double(ActiveRecord::Relation)
 
         allow(Whatsapp::OneoffWhatsappCampaignService).to receive(:new).and_return(service_instance)
         allow(service_instance).to receive(:audience_contacts).and_return(contacts_mock)
@@ -186,7 +180,7 @@ RSpec.describe Whatsapp::OneoffCampaignJob, type: :job do
 
       it 'logs errors for failed contact processing' do
         service_instance = instance_double(Whatsapp::OneoffWhatsappCampaignService)
-        contacts_mock = double('ContactsRelation')
+        contacts_mock = instance_double(ActiveRecord::Relation)
 
         allow(Whatsapp::OneoffWhatsappCampaignService).to receive(:new).and_return(service_instance)
         allow(service_instance).to receive(:audience_contacts).and_return(contacts_mock)
@@ -209,7 +203,7 @@ RSpec.describe Whatsapp::OneoffCampaignJob, type: :job do
       end
     end
 
-    context 'edge cases' do
+    context 'when handling edge cases' do
       it 'handles nil campaign gracefully' do
         expect do
           job.perform(nil)
@@ -219,7 +213,9 @@ RSpec.describe Whatsapp::OneoffCampaignJob, type: :job do
       it 'handles campaign without account' do
         allow(campaign).to receive(:account).and_return(nil)
 
-        allow_any_instance_of(Whatsapp::OneoffWhatsappCampaignService).to receive(:audience_contacts)
+        service_mock = instance_double(Whatsapp::OneoffWhatsappCampaignService)
+        allow(Whatsapp::OneoffWhatsappCampaignService).to receive(:new).and_return(service_mock)
+        allow(service_mock).to receive(:audience_contacts)
           .and_raise(CustomExceptions::Campaign::AccountNotFound)
 
         expect do
@@ -230,7 +226,9 @@ RSpec.describe Whatsapp::OneoffCampaignJob, type: :job do
       it 'handles campaign without inbox' do
         allow(campaign).to receive(:inbox).and_return(nil)
 
-        allow_any_instance_of(Whatsapp::OneoffWhatsappCampaignService).to receive(:audience_contacts)
+        service_mock = instance_double(Whatsapp::OneoffWhatsappCampaignService)
+        allow(Whatsapp::OneoffWhatsappCampaignService).to receive(:new).and_return(service_mock)
+        allow(service_mock).to receive(:audience_contacts)
           .and_raise(CustomExceptions::Campaign::InboxNotFound)
 
         expect do
@@ -249,7 +247,7 @@ RSpec.describe Whatsapp::OneoffCampaignJob, type: :job do
         end
 
         service_instance = instance_double(Whatsapp::OneoffWhatsappCampaignService)
-        contacts_mock = double('ContactsRelation')
+        contacts_mock = instance_double(ActiveRecord::Relation)
 
         allow(Whatsapp::OneoffWhatsappCampaignService).to receive(:new).and_return(service_instance)
         allow(service_instance).to receive(:audience_contacts).and_return(contacts_mock)
@@ -281,7 +279,7 @@ RSpec.describe Whatsapp::OneoffCampaignJob, type: :job do
       end
 
       it 'handles unexpected errors gracefully' do
-        service_mock = double('WhatsappCampaignService')
+        service_mock = instance_double(Whatsapp::OneoffWhatsappCampaignService)
         allow(Whatsapp::OneoffWhatsappCampaignService).to receive(:new).and_return(service_mock)
         allow(service_mock).to receive(:audience_contacts)
           .and_raise(StandardError.new('Persistent error'))

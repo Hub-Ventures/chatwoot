@@ -119,7 +119,7 @@ class Whatsapp::OneoffCampaignJob < ApplicationJob
                              campaign_id: campaign.id, successful: stats[:successful], failed: stats[:failed])
 
     # Mark as completed if we had any success or no errors at all
-    campaign.completed! if stats[:successful] > 0 || stats[:failed] == 0
+    campaign.completed! if stats[:successful].positive? || stats[:failed].zero?
   end
 
   def handle_timeout_error(campaign)
