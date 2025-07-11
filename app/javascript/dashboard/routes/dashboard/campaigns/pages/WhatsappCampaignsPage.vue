@@ -23,9 +23,17 @@ const isFetchingCampaigns = computed(() => uiFlags.value.isFetching);
 
 const confirmDeleteCampaignDialogRef = ref(null);
 
-const WhatsappCampaigns = computed(() =>
-  getters['campaigns/getCampaigns'].value(CAMPAIGN_TYPES.ONE_OFF)
-);
+const WhatsappCampaigns = computed(() => {
+  const allOneOffCampaigns = getters['campaigns/getCampaigns'].value(
+    CAMPAIGN_TYPES.ONE_OFF
+  );
+
+  return allOneOffCampaigns.filter(campaign => {
+    return (
+      campaign.inbox && campaign.inbox.channel_type === 'Channel::Whatsapp'
+    );
+  });
+});
 
 const hasNoWhatsappCampaigns = computed(
   () => WhatsappCampaigns.value?.length === 0 && !isFetchingCampaigns.value

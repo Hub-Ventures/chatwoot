@@ -23,9 +23,15 @@ const isFetchingCampaigns = computed(() => uiFlags.value.isFetching);
 
 const confirmDeleteCampaignDialogRef = ref(null);
 
-const SMSCampaigns = computed(() =>
-  getters['campaigns/getCampaigns'].value(CAMPAIGN_TYPES.ONE_OFF)
-);
+const SMSCampaigns = computed(() => {
+  const allOneOffCampaigns = getters['campaigns/getCampaigns'].value(
+    CAMPAIGN_TYPES.ONE_OFF
+  );
+
+  return allOneOffCampaigns.filter(campaign => {
+    return campaign.inbox && campaign.inbox.channel_type === 'Channel::Sms';
+  });
+});
 
 const hasNoSMSCampaigns = computed(
   () => SMSCampaigns.value?.length === 0 && !isFetchingCampaigns.value

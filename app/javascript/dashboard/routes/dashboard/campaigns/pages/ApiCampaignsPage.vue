@@ -27,13 +27,9 @@ const apiCampaigns = computed(() => {
   const allOneOffCampaigns = getters['campaigns/getCampaigns'].value(
     CAMPAIGN_TYPES.ONE_OFF
   );
-  const inboxesMap = getters['inboxes/getInboxes'].value;
 
   return allOneOffCampaigns.filter(campaign => {
-    const campaignInbox = inboxesMap.find(
-      inbox => inbox.id === campaign.inbox_id
-    );
-    return campaignInbox && campaignInbox.channel_type === 'Channel::Api';
+    return campaign.inbox && campaign.inbox.channel_type === 'Channel::Api';
   });
 });
 
@@ -74,7 +70,7 @@ const handleDelete = campaign => {
     <SMSCampaignEmptyState
       v-else
       :title="t('CAMPAIGN.API.EMPTY_STATE.TITLE')"
-      :subtitle="t('CAMPAIGN.API.EMPTY_STATE.DESCRIPTION')"
+      :subtitle="t('CAMPAIGN.API.EMPTY_STATE.SUBTITLE')"
       class="pt-14"
     />
     <ConfirmDeleteCampaignDialog
