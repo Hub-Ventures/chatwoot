@@ -83,6 +83,8 @@ es:
       no_contacts_found: 'No se encontraron contactos para la audiencia seleccionada'
       too_many_failures: 'Campaña detenida debido a demasiados errores'
       timeout_error: 'La campaña agotó el tiempo de espera después de %{duration}'
+      invalid_template: 'La plantilla de la campaña es inválida o mal formada'
+      message_delivery_failed: 'Fallo en la entrega del mensaje'
     jobs:
       whatsapp_campaign:
         skipping_completed: 'Omitiendo job para campaña ya completada %{campaign_id}'
