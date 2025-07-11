@@ -151,7 +151,7 @@
       "NEW_CAMPAIGN": "Crear campaña",
       "EMPTY_STATE": {
         "TITLE": "No hay campañas de WhatsApp disponibles",
-        "SUBTITLE": "Inicie una campaña de WhatsApp para llegar directamente a sus clientes. Envíe ofertas o haga anuncios con facilidad. Haga clic en 'Crear campaña' para empezar."
+        "SUBTITLE": "Inicia una campaña de WhatsApp para llegar directamente a tus clientes. Envía ofertas o haz anuncios con facilidad. Haz clic en 'Crear campaña' para empezar."
       },
       "CREATE": {
         "TITLE": "Crear Campaña de WhatsApp",
@@ -185,6 +185,14 @@
           "TEMPLATE_VARIABLES": {
             "TITLE": "Variables de la plantilla",
             "SUBTITLE": "Proporcione valores para las variables de su plantilla."
+          },
+          "PREVIEW": {
+            "TITLE": "Vista previa del mensaje",
+            "BUSINESS_NAME": "Su Negocio",
+            "ONLINE": "en línea",
+            "NO_TEMPLATE": "Seleccione una plantilla para ver la vista previa",
+            "MISSING_PARAMS": "Parámetros faltantes",
+            "MISSING_PARAMS_LIST": "Por favor complete estos parámetros: {params}"
           },
           "BUTTONS": {
             "CREATE": "Crear campaña",

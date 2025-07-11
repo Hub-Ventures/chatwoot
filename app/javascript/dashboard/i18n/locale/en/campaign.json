@@ -186,6 +186,14 @@
             "TITLE": "Template Variables",
             "SUBTITLE": "Provide values for the variables in your template."
           },
+          "PREVIEW": {
+            "TITLE": "Message Preview",
+            "BUSINESS_NAME": "Your Business",
+            "ONLINE": "online",
+            "NO_TEMPLATE": "Select a template to see preview",
+            "MISSING_PARAMS": "Missing parameters",
+            "MISSING_PARAMS_LIST": "Please fill in these parameters: {params}"
+          },
           "BUTTONS": {
             "CREATE": "Create campaign",
             "CANCEL": "Cancel"

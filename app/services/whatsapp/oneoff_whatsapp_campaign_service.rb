@@ -47,14 +47,35 @@ class Whatsapp::OneoffWhatsappCampaignService
   private
 
   def validate_campaign!
-    raise ArgumentError, 'Campaign cannot be nil' if campaign.nil?
-    raise ArgumentError, 'Campaign is already completed' if campaign.completed?
-    raise ArgumentError, 'Campaign audience cannot be nil' if campaign.audience.nil?
-    raise ArgumentError, 'Campaign message cannot be blank' if campaign.message.blank?
-    raise ArgumentError, 'Campaign template_info cannot be nil' if campaign.template_info.nil?
-    raise ArgumentError, 'Campaign template_info must have name' if campaign.template_info['name'].blank?
-    raise ArgumentError, 'Campaign account must exist' unless campaign.account.present?
-    raise ArgumentError, 'Campaign inbox must exist' unless campaign.inbox.present?
+    validate_campaign_existence!
+    validate_campaign_state!
+    validate_campaign_data!
+    validate_campaign_associations!
+  end
+
+  def validate_campaign_existence!
+    raise CustomExceptions::Campaign::InvalidCampaign, {} if campaign.nil?
+  end
+
+  def validate_campaign_state!
+    raise CustomExceptions::Campaign::AlreadyCompleted, {} if campaign.completed?
+  end
+
+  def validate_campaign_data!
+    raise CustomExceptions::Campaign::MissingAudience, {} if campaign.audience.nil?
+    raise CustomExceptions::Campaign::MissingMessage, {} if campaign.message.blank?
+
+    validate_template_info!
+  end
+
+  def validate_template_info!
+    raise CustomExceptions::Campaign::MissingTemplateInfo, {} if campaign.template_info.nil?
+    raise CustomExceptions::Campaign::MissingTemplateName, {} if campaign.template_info['name'].blank?
+  end
+
+  def validate_campaign_associations!
+    raise CustomExceptions::Campaign::AccountNotFound, {} if campaign.account.blank?
+    raise CustomExceptions::Campaign::InboxNotFound, {} if campaign.inbox.blank?
   end
 
   def find_or_create_conversation(contact_inbox)

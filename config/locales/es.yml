@@ -70,6 +70,15 @@ es:
       invalid_value: Valor no válido. Los valores proporcionados para %{attribute_name} no son válidos
     custom_attribute_definition:
       key_conflict: The provided key is not allowed as it might conflict with default attributes.
+    campaign:
+      invalid_campaign: La campaña no puede ser nula
+      already_completed: La campaña ya está completada
+      missing_audience: La audiencia de la campaña no puede ser nula
+      missing_message: El mensaje de la campaña no puede estar vacío
+      missing_template_info: La información de plantilla de la campaña no puede ser nula
+      missing_template_name: La información de plantilla de la campaña debe tener un nombre
+      account_not_found: La cuenta de la campaña debe existir
+      inbox_not_found: La bandeja de entrada de la campaña debe existir
   reports:
     period: Reportando el periodo desde %{since} hasta %{until}
     utc_warning: El informe generado está en zona horaria UTC

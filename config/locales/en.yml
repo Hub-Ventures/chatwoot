@@ -84,6 +84,15 @@ en:
       invalid_value: Invalid value. The values provided for %{attribute_name} are invalid
     custom_attribute_definition:
       key_conflict: The provided key is not allowed as it might conflict with default attributes.
+    campaign:
+      invalid_campaign: Campaign cannot be nil
+      already_completed: Campaign is already completed
+      missing_audience: Campaign audience cannot be nil
+      missing_message: Campaign message cannot be blank
+      missing_template_info: Campaign template info cannot be nil
+      missing_template_name: Campaign template info must have name
+      account_not_found: Campaign account must exist
+      inbox_not_found: Campaign inbox must exist
   reports:
     period: Reporting period %{since} to %{until}
     utc_warning: The report generated is in UTC timezone
