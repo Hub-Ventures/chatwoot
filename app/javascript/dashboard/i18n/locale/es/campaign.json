@@ -146,6 +146,67 @@
         "ERROR_MESSAGE": "Se presentó un error. Por favor intente nuevamente."
       }
     },
+    "API": {
+      "HEADER": "Campañas API",
+      "DESCRIPTION": "Envía mensajes dirigidos a tus contactos usando canales API para integración programática.",
+      "NEW_BUTTON": "Crear campaña",
+      "EMPTY_STATE": {
+        "TITLE": "No hay campañas API disponibles",
+        "SUBTITLE": "Inicia una campaña API para llegar a tus contactos a través de integración programática. Perfecta para notificaciones automáticas e integraciones personalizadas. Haz clic en 'Crear campaña' para empezar."
+      },
+      "DIALOG": {
+        "TITLE": "Crear Campaña API"
+      },
+      "FORM": {
+        "BASIC_INFO": {
+          "TITLE": "Información Básica"
+        },
+        "TITLE": {
+          "LABEL": "Título de la campaña",
+          "PLACEHOLDER": "Introduzca un título para su campaña",
+          "ERROR": "El título de la campaña es obligatorio"
+        },
+        "INBOX": {
+          "LABEL": "Seleccionar Bandeja API",
+          "PLACEHOLDER": "Seleccione una bandeja API para enviar desde",
+          "ERROR": "La bandeja API es obligatoria"
+        },
+        "SENDER": {
+          "LABEL": "Remitente",
+          "PLACEHOLDER": "Seleccione quién envía el mensaje"
+        },
+        "MESSAGE": {
+          "TITLE": "Mensaje",
+          "LABEL": "Contenido del Mensaje",
+          "PLACEHOLDER": "Introduzca el contenido de su mensaje. Puede usar variables liquid como {contact.name} para personalización.",
+          "ERROR": "El contenido del mensaje es obligatorio",
+          "PREVIEW": "Vista Previa del Mensaje"
+        },
+        "AUDIENCE": {
+          "ERROR": "Por favor seleccione al menos una etiqueta de audiencia"
+        },
+        "TIMING": {
+          "LABEL": "Hora Programada",
+          "ERROR": "Por favor seleccione una hora programada"
+        },
+        "AUDIENCE": {
+          "LABEL": "Audiencia",
+          "PLACEHOLDER": "Seleccione las etiquetas de cliente a las que dirigirse",
+          "ERROR": "Por favor seleccione al menos una etiqueta de audiencia"
+        },
+        "ACTIONS": {
+          "CANCEL": "Cancelar",
+          "CREATE": "Crear Campaña"
+        },
+        "SUBMIT": {
+          "SUCCESS": "Campaña API creada con éxito",
+          "ERROR": "Hubo un error al crear la campaña. Por favor, inténtelo de nuevo."
+        }
+      },
+      "AGENT_OPTIONS": {
+        "SYSTEM": "Sistema (Automatizado)"
+      }
+    },
     "WHATSAPP": {
       "HEADER_TITLE": "Campañas de WhatsApp",
       "NEW_CAMPAIGN": "Crear campaña",

@@ -8,7 +8,7 @@ import { CAMPAIGN_TYPES } from 'shared/constants/campaign.js';
 import Spinner from 'dashboard/components-next/spinner/Spinner.vue';
 import CampaignLayout from 'dashboard/components-next/Campaigns/CampaignLayout.vue';
 import CampaignList from 'dashboard/components-next/Campaigns/Pages/CampaignPage/CampaignList.vue';
-import WhatsappCampaignDialog from 'dashboard/components-next/Campaigns/Pages/CampaignPage/WhatsappCampaign/WhatsappCampaignDialog.vue';
+import ApiCampaignDialog from 'dashboard/components-next/Campaigns/Pages/CampaignPage/ApiCampaign/ApiCampaignDialog.vue';
 import ConfirmDeleteCampaignDialog from 'dashboard/components-next/Campaigns/Pages/CampaignPage/ConfirmDeleteCampaignDialog.vue';
 import SMSCampaignEmptyState from 'dashboard/components-next/Campaigns/EmptyState/SMSCampaignEmptyState.vue';
 
@@ -16,14 +16,14 @@ const { t } = useI18n();
 const getters = useStoreGetters();
 
 const selectedCampaign = ref(null);
-const [showWhatsappCampaignDialog, toggleWhatsappCampaignDialog] = useToggle();
+const [showApiCampaignDialog, toggleApiCampaignDialog] = useToggle();
 
 const uiFlags = useMapGetter('campaigns/getUIFlags');
 const isFetchingCampaigns = computed(() => uiFlags.value.isFetching);
 
 const confirmDeleteCampaignDialogRef = ref(null);
 
-const WhatsappCampaigns = computed(() => {
+const apiCampaigns = computed(() => {
   const allOneOffCampaigns = getters['campaigns/getCampaigns'].value(
     CAMPAIGN_TYPES.ONE_OFF
   );
@@ -33,12 +33,12 @@ const WhatsappCampaigns = computed(() => {
     const campaignInbox = inboxesMap.find(
       inbox => inbox.id === campaign.inbox_id
     );
-    return campaignInbox && campaignInbox.channel_type === 'Channel::Whatsapp';
+    return campaignInbox && campaignInbox.channel_type === 'Channel::Api';
   });
 });
 
-const hasNoWhatsappCampaigns = computed(
-  () => WhatsappCampaigns.value?.length === 0 && !isFetchingCampaigns.value
+const hasNoApiCampaigns = computed(
+  () => apiCampaigns.value?.length === 0 && !isFetchingCampaigns.value
 );
 
 const handleDelete = campaign => {
@@ -49,15 +49,15 @@ const handleDelete = campaign => {
 
 <template>
   <CampaignLayout
-    :header-title="t('CAMPAIGN.WHATSAPP.HEADER_TITLE')"
-    :button-label="t('CAMPAIGN.WHATSAPP.NEW_CAMPAIGN')"
-    @click="toggleWhatsappCampaignDialog()"
-    @close="toggleWhatsappCampaignDialog(false)"
+    :header-title="t('CAMPAIGN.API.HEADER')"
+    :button-label="t('CAMPAIGN.API.NEW_BUTTON')"
+    @click="toggleApiCampaignDialog()"
+    @close="toggleApiCampaignDialog(false)"
   >
     <template #action>
-      <WhatsappCampaignDialog
-        v-if="showWhatsappCampaignDialog"
-        @close="toggleWhatsappCampaignDialog(false)"
+      <ApiCampaignDialog
+        v-if="showApiCampaignDialog"
+        @close="toggleApiCampaignDialog(false)"
       />
     </template>
     <div
@@ -67,14 +67,14 @@ const handleDelete = campaign => {
       <Spinner />
     </div>
     <CampaignList
-      v-else-if="!hasNoWhatsappCampaigns"
-      :campaigns="WhatsappCampaigns"
+      v-else-if="!hasNoApiCampaigns"
+      :campaigns="apiCampaigns"
       @delete="handleDelete"
     />
     <SMSCampaignEmptyState
       v-else
-      :title="t('CAMPAIGN.WHATSAPP.EMPTY_STATE.TITLE')"
-      :subtitle="t('CAMPAIGN.WHATSAPP.EMPTY_STATE.SUBTITLE')"
+      :title="t('CAMPAIGN.API.EMPTY_STATE.TITLE')"
+      :subtitle="t('CAMPAIGN.API.EMPTY_STATE.DESCRIPTION')"
       class="pt-14"
     />
     <ConfirmDeleteCampaignDialog

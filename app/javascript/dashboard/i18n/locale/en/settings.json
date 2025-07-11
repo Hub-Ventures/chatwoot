@@ -321,6 +321,7 @@
     "SMS": "SMS",
     "CAMPAIGNS": "Campaigns",
     "WHATSAPP": "WhatsApp",
+    "API": "API",
     "ONGOING": "Ongoing",
     "ONE_OFF": "One off",
     "REPORTS_SLA": "SLA",

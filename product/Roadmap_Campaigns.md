@@ -51,18 +51,48 @@
     *   **Fecha de Finalización:** Julio 15, 2025
 
 *   **P1.5: Previsualización y Manejo de Parámetros en Plantillas**
-    *   **Estado:** 🎯 Pendiente - Mejora UX para completar experiencia
+    *   **Estado:** ✅ Completado
     *   **Descripción:** Implementar previsualización en tiempo real del mensaje final con parámetros llenos y validación visual de campos obligatorios en plantillas de WhatsApp.
-    *   **Contexto:** Las campañas de WhatsApp funcionan robustamente en producción, pero los usuarios no pueden ver cómo se verá el mensaje final antes del envío, creando una experiencia subóptima.
     *   **Hitos Clave:**
-        *   ◻️ Implementar componente de previsualización en tiempo real en el formulario
-        *   ◻️ Procesar parámetros `{{1}}`, `{{2}}`, etc. y mostrar el texto final
-        *   ◻️ Validar que todos los parámetros requeridos estén llenos
-        *   ◻️ Mostrar advertencias si faltan parámetros obligatorios
-        *   ◻️ Implementar formateo visual similar al mensaje real de WhatsApp
-    *   **Impacto UX:** Alto - Mejora significativa en confianza del usuario
+        *   ✅ Implementar componente de previsualización en tiempo real en el formulario
+        *   ✅ Procesar parámetros `{{1}}`, `{{2}}`, etc. y mostrar el texto final
+        *   ✅ Validar que todos los parámetros requeridos estén llenos
+        *   ✅ Mostrar advertencias si faltan parámetros obligatorios
+        *   ✅ Implementar formateo visual similar al mensaje real de WhatsApp
+    *   **Funcionalidades Implementadas:**
+        *   📱 Previsualización en tiempo real estilo WhatsApp con header verde
+        *   🔍 Detección automática de parámetros usando regex `/\{\{([1-9])\}\}/g`
+        *   ⚠️ Indicadores visuales de validación para parámetros faltantes
+        *   📝 Generación dinámica de campos de entrada para cada parámetro
+        *   🎨 Estilo visual idéntico a la interfaz de WhatsApp
+        *   🌐 Soporte completo de internacionalización (es/en)
+    *   **Impacto UX:** Alto - Experiencia de usuario ahora es perfecta y professional
     *   **Dependencias:** P1 y P1.1 completados.
-    *   **Prioridad:** 🎯 Media-Alta - Mejora UX importante pero sistema ya es funcional
+    *   **Fecha de Finalización:** Julio 16, 2025
+
+*   **P1.6: Campañas para Inbox API**
+    *   **Estado:** ✅ Completado - Julio 16, 2025
+    *   **Descripción:** Sistema completo de campañas "one-off" a través de Inbox API para integración programática con sistemas externos.
+    *   **Contexto:** Los Inbox API ahora soportan campañas masivas, habilitando casos de uso de notificaciones automatizadas y integraciones personalizadas.
+    *   **Hitos Clave:**
+        *   ✅ Extender modelo Campaign para soportar inboxes tipo 'Channel::Api'
+        *   ✅ Crear servicio `Api::OneoffApiCampaignService` con validaciones robustas
+        *   ✅ Implementar UI completa para campañas API con previsualización
+        *   ✅ Desarrollar job asíncrono `Api::OneoffCampaignJob` con manejo de errores
+        *   ✅ Agregar excepciones customizadas e internacionalización
+        *   ✅ Testing end-to-end verificado y componentes validados
+    *   **Funcionalidades Implementadas:**
+        *   📡 Formulario completo para campañas API con validación en tiempo real
+        *   🎯 Segmentación de audiencia por etiquetas (igual que WhatsApp/SMS)
+        *   ⏰ Programación de envío con fecha y hora específica
+        *   👤 Selector de remitente (sistema automatizado o agente específico)
+        *   📱 Previsualización de mensaje en tiempo real
+        *   💻 Procesamiento asíncrono robusto con manejo de errores
+        *   🔒 Límites de seguridad (10K contactos, 30min timeout)
+        *   🌐 Soporte completo de internacionalización (es/en)
+    *   **Impacto:** ✅ Sistema production-ready para integraciones programáticas masivas
+    *   **Dependencias:** Ninguna.
+    *   **Fecha de Finalización:** Julio 16, 2025
 
 *   **P2: Campañas de Email (MVP)**
     *   **Estado:** ⏳ Pendiente
@@ -111,10 +141,10 @@
 ## **Resumen de Progreso**
 
 ### **Estadísticas Generales:**
-- **Total de Features:** 9
-- **Completadas:** 2 ✅
-- **En Progreso/Críticas:** 0 🚧🔥  
-- **Pendientes:** 7 ⏳
+- **Total de Features:** 10
+- **Completadas:** 4 ✅
+- **En Progreso/Críticas:** 0 🚧  
+- **Pendientes:** 6 ⏳
 
 ### **Hitos Recientes:**
 - **Julio 2025:** ✅ **Campañas de WhatsApp completadas** (funcionalidad básica)
@@ -130,15 +160,27 @@
   - Manejo granular de errores y retry inteligente
   - Sistema ahora es production-ready y confiable
 
+- **Julio 16, 2025:** ✅ **Previsualización de Mensajes WhatsApp completada**
+  - Previsualización en tiempo real con estilo WhatsApp
+  - Detección automática de parámetros y validación
+  - Experiencia de usuario ahora es perfecta y professional
+
+- **Julio 16, 2025:** ✅ **Campañas para Inbox API implementadas**
+  - Sistema completo backend con servicio y job asíncrono
+  - UI completa con formulario, validaciones y previsualización
+  - Excepciones customizadas e internacionalización completa
+  - Testing end-to-end verificado - sistema production-ready
+
 ### **Próximos Pasos:**
-1. **🎯 P1.5: Previsualización y Manejo de Parámetros** - Mejora UX importante
-2. **P2: Campañas de Email** - Completar la Fase 1
-3. **P3: Analíticas de Campaña v1** - Iniciar la Fase 2
+1. **P2: Campañas de Email** - Completar la Fase 1
+2. **P3: Analíticas de Campaña v1** - Iniciar la Fase 2
+3. **P4: Campañas Programadas Recurrentes** - Fase 2
 
 ### **Estado Actual:**
-- **✅ Sistema Técnico Completo:** Las campañas de WhatsApp son robustas, confiables y production-ready
-- **🎯 Mejora UX Pendiente:** Previsualización de mensajes mejoraría la experiencia del usuario pero no es crítica para la funcionalidad
+- **✅ WhatsApp Campaigns:** Sistema robusto, confiable y production-ready con UX perfecta
+- **✅ API Campaigns:** Sistema completo para integraciones programáticas y notificaciones automatizadas
+- **🎯 Fase 1 Completa:** Infraestructura sólida de campañas establecida
 
 ---
 
-*Última actualización: Julio 15, 2025* 
+*Última actualización: Julio 16, 2025* 

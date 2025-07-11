@@ -79,6 +79,10 @@ es:
       missing_template_name: La información de plantilla de la campaña debe tener un nombre
       account_not_found: La cuenta de la campaña debe existir
       inbox_not_found: La bandeja de entrada de la campaña debe existir
+      too_many_contacts: "La campaña excede el límite de seguridad de %{limit} contactos. Se encontraron %{count} contactos."
+      no_contacts_found: "No se encontraron contactos para la audiencia seleccionada"
+      too_many_failures: "Campaña detenida debido a demasiados errores"
+      timeout_error: "La campaña agotó el tiempo de espera después de %{duration}"
   reports:
     period: Reportando el periodo desde %{since} hasta %{until}
     utc_warning: El informe generado está en zona horaria UTC

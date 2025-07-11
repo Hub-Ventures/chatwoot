@@ -48,4 +48,32 @@ module CustomExceptions::Campaign
       I18n.t('errors.campaign.inbox_not_found')
     end
   end
+
+  class TooManyContacts < CustomExceptions::Base
+    def to_hash
+      {
+        message: I18n.t('errors.campaign.too_many_contacts', limit: @data[:limit], count: @data[:count])
+      }
+    end
+  end
+
+  class NoContactsFound < CustomExceptions::Base
+    def message
+      I18n.t('errors.campaign.no_contacts_found')
+    end
+  end
+
+  class TooManyFailures < CustomExceptions::Base
+    def message
+      I18n.t('errors.campaign.too_many_failures')
+    end
+  end
+
+  class TimeoutError < CustomExceptions::Base
+    def to_hash
+      {
+        message: I18n.t('errors.campaign.timeout_error', duration: @data[:duration])
+      }
+    end
+  end
 end

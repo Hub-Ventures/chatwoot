@@ -146,6 +146,67 @@
         "ERROR_MESSAGE": "There was an error. Please try again."
       }
     },
+    "API": {
+      "HEADER": "API Campaigns",
+      "DESCRIPTION": "Send targeted messages to your contacts using API channels for programmatic integration.",
+      "NEW_BUTTON": "Create campaign",
+      "EMPTY_STATE": {
+        "TITLE": "No API campaigns are available",
+        "SUBTITLE": "Launch an API campaign to reach your contacts through programmatic integration. Perfect for automated notifications and custom integrations. Click 'Create campaign' to get started."
+      },
+      "DIALOG": {
+        "TITLE": "Create API Campaign"
+      },
+      "FORM": {
+        "BASIC_INFO": {
+          "TITLE": "Basic Information"
+        },
+        "TITLE": {
+          "LABEL": "Campaign Title",
+          "PLACEHOLDER": "Enter a title for your campaign",
+          "ERROR": "Campaign title is required"
+        },
+        "INBOX": {
+          "LABEL": "Select API Inbox",
+          "PLACEHOLDER": "Select an API inbox to send from",
+          "ERROR": "API inbox is required"
+        },
+        "SENDER": {
+          "LABEL": "Sender",
+          "PLACEHOLDER": "Select who sends the message"
+        },
+        "MESSAGE": {
+          "TITLE": "Message",
+          "LABEL": "Message Content",
+          "PLACEHOLDER": "Enter your message content. You can use liquid variables like {contact.name} for personalization.",
+          "ERROR": "Message content is required",
+          "PREVIEW": "Message Preview"
+        },
+        "AUDIENCE": {
+          "ERROR": "Please select at least one audience label"
+        },
+        "TIMING": {
+          "LABEL": "Scheduled Time",
+          "ERROR": "Please select a scheduled time"
+        },
+        "AUDIENCE": {
+          "LABEL": "Audience",
+          "PLACEHOLDER": "Select customer labels to target",
+          "ERROR": "Please select at least one audience label"
+        },
+        "ACTIONS": {
+          "CANCEL": "Cancel",
+          "CREATE": "Create Campaign"
+        },
+        "SUBMIT": {
+          "SUCCESS": "API campaign created successfully",
+          "ERROR": "There was an error creating the campaign. Please try again."
+        }
+      },
+      "AGENT_OPTIONS": {
+        "SYSTEM": "System (Automated)"
+      }
+    },
     "WHATSAPP": {
       "HEADER_TITLE": "WhatsApp Campaigns",
       "NEW_CAMPAIGN": "Create campaign",
