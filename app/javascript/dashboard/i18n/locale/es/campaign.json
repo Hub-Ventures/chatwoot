@@ -178,12 +178,9 @@
         "MESSAGE": {
           "TITLE": "Mensaje",
           "LABEL": "Contenido del Mensaje",
-          "PLACEHOLDER": "Introduzca el contenido de su mensaje. Puede usar variables liquid como {contact.name} para personalización.",
+          "PLACEHOLDER": "Introduzca el contenido de su mensaje. Puede usar variables liquid como '[contact.name]' para personalización.",
           "ERROR": "El contenido del mensaje es obligatorio",
           "PREVIEW": "Vista Previa del Mensaje"
-        },
-        "AUDIENCE": {
-          "ERROR": "Por favor seleccione al menos una etiqueta de audiencia"
         },
         "TIMING": {
           "LABEL": "Hora Programada",

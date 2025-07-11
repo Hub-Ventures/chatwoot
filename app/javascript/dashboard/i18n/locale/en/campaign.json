@@ -178,12 +178,9 @@
         "MESSAGE": {
           "TITLE": "Message",
           "LABEL": "Message Content",
-          "PLACEHOLDER": "Enter your message content. You can use liquid variables like {contact.name} for personalization.",
+          "PLACEHOLDER": "Enter your message content. You can use liquid variables like '[contact.name]' for personalization.",
           "ERROR": "Message content is required",
           "PREVIEW": "Message Preview"
-        },
-        "AUDIENCE": {
-          "ERROR": "Please select at least one audience label"
         },
         "TIMING": {
           "LABEL": "Scheduled Time",

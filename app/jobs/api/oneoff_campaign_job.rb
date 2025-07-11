@@ -1,7 +1,5 @@
 class Api::OneoffCampaignJob < ApplicationJob
-  include CampaignJobsHelper
-
-  queue_as :campaigns
+  queue_as :low
 
   # Job configuration
   SAFETY_LIMIT_CONTACTS = 10_000

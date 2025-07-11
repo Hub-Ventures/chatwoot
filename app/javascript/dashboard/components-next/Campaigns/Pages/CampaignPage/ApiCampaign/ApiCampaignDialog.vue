@@ -112,6 +112,7 @@ const handleSubmit = async () => {
       inbox_id: formData.inbox_id,
       sender_id: formData.sender_id,
       scheduled_at: new Date(formData.scheduled_at).toISOString(),
+      enabled: formData.enabled,
       audience: formData.audience.map(id => ({
         id,
         type: 'Label',
