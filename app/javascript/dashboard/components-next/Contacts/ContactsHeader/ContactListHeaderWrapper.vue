@@ -88,24 +88,33 @@ const onCreate = async contact => {
       t('CONTACTS_LAYOUT.HEADER.ACTIONS.CONTACT_CREATION.SUCCESS_MESSAGE')
     );
   } catch (error) {
-    const i18nPrefix = 'CONTACTS_LAYOUT.HEADER.ACTIONS.CONTACT_CREATION';
     if (error instanceof DuplicateContactException) {
       if (error.data.includes('email')) {
-        useAlert(t(`${i18nPrefix}.EMAIL_ADDRESS_DUPLICATE`));
+        useAlert(
+          t(
+            'CONTACTS_LAYOUT.HEADER.ACTIONS.CONTACT_CREATION.EMAIL_ADDRESS_DUPLICATE'
+          )
+        );
       } else if (error.data.includes('phone_number')) {
-        useAlert(t(`${i18nPrefix}.PHONE_NUMBER_DUPLICATE`));
+        useAlert(
+          t(
+            'CONTACTS_LAYOUT.HEADER.ACTIONS.CONTACT_CREATION.PHONE_NUMBER_DUPLICATE'
+          )
+        );
       }
     } else if (error instanceof ExceptionWithMessage) {
       useAlert(error.data);
     } else {
-      useAlert(t(`${i18nPrefix}.ERROR_MESSAGE`));
+      useAlert(
+        t('CONTACTS_LAYOUT.HEADER.ACTIONS.CONTACT_CREATION.ERROR_MESSAGE')
+      );
     }
   }
 };
 
-const onImport = async file => {
+const onImport = async ({ file, channelIds = [] }) => {
   try {
-    await store.dispatch('contacts/import', file);
+    await store.dispatch('contacts/import', { file, channelIds });
     contactImportDialogRef.value?.dialogRef.close();
     useAlert(
       t('CONTACTS_LAYOUT.HEADER.ACTIONS.IMPORT_CONTACT.SUCCESS_MESSAGE')

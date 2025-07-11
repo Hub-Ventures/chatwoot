@@ -1,12 +1,37 @@
 class DataImport::ContactManager
-  def initialize(account)
+  def initialize(account, channel_ids: [])
     @account = account
+    @channel_ids = channel_ids
+    @valid_inboxes = validate_and_fetch_inboxes(channel_ids)
   end
 
   def build_contact(params)
     contact = find_or_initialize_contact(params)
     update_contact_attributes(params, contact)
     contact
+  end
+
+  def create_contact_inbox_associations(contacts)
+    return if @valid_inboxes.empty? || contacts.empty?
+
+    Rails.logger.info "[ContactManager] Creating ContactInbox associations for #{contacts.count} contacts across #{@valid_inboxes.count} inboxes"
+
+    # Use the dedicated service for bulk association
+    service = Contacts::BulkChannelAssociationService.new(
+      account: @account,
+      contact_ids: contacts.map(&:id),
+      inbox_ids: @valid_inboxes.map(&:id)
+    )
+
+    result = service.perform
+
+    if result[:success]
+      Rails.logger.info "[ContactManager] #{result[:message]}"
+    else
+      Rails.logger.error "[ContactManager] Failed to create associations: #{result[:error]}"
+    end
+
+    result
   end
 
   def find_or_initialize_contact(params)
@@ -57,6 +82,20 @@ class DataImport::ContactManager
   end
 
   private
+
+  def validate_and_fetch_inboxes(channel_ids)
+    return [] if channel_ids.blank?
+
+    inboxes = @account.inboxes.where(id: channel_ids)
+
+    if inboxes.count != channel_ids.count
+      found_ids = inboxes.pluck(:id)
+      missing_ids = channel_ids - found_ids
+      Rails.logger.warn "[ContactManager] Invalid inbox IDs provided: #{missing_ids.join(', ')}"
+    end
+
+    inboxes
+  end
 
   def update_contact_attributes(params, contact)
     contact.name = params[:name] if params[:name].present?

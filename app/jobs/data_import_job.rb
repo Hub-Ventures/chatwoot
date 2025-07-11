@@ -7,7 +7,10 @@ class DataImportJob < ApplicationJob
 
   def perform(data_import)
     @data_import = data_import
-    @contact_manager = DataImport::ContactManager.new(@data_import.account)
+    @contact_manager = DataImport::ContactManager.new(
+      @data_import.account,
+      channel_ids: @data_import.channel_ids
+    )
     begin
       process_import_file
       send_import_notification_to_admin
@@ -22,7 +25,9 @@ class DataImportJob < ApplicationJob
     @data_import.update!(status: :processing)
     contacts, rejected_contacts = parse_csv_and_build_contacts
 
-    import_contacts(contacts)
+    imported_contacts = import_contacts(contacts)
+    create_channel_associations(imported_contacts) if imported_contacts.any?
+
     update_data_import_status(contacts.length, rejected_contacts.length)
     save_failed_records_csv(rejected_contacts)
   end
@@ -58,7 +63,24 @@ class DataImportJob < ApplicationJob
 
   def import_contacts(contacts)
     # <struct ActiveRecord::Import::Result failed_instances=[], num_inserts=1, ids=[444, 445], results=[]>
-    Contact.import(contacts, synchronize: contacts, on_duplicate_key_ignore: true, track_validation_failures: true, validate: true, batch_size: 1000)
+    result = Contact.import(contacts, synchronize: contacts, on_duplicate_key_ignore: true, track_validation_failures: true, validate: true,
+                                      batch_size: 1000)
+
+    # Return the actual Contact records that were successfully imported
+    # We need to get them by their attributes since import doesn't return the actual records
+    if result.ids.any?
+      Contact.where(id: result.ids)
+    else
+      Contact.none
+    end
+  end
+
+  def create_channel_associations(imported_contacts)
+    Rails.logger.info "[DataImportJob] Creating channel associations for #{imported_contacts.count} imported contacts"
+    @contact_manager.create_contact_inbox_associations(imported_contacts)
+  rescue StandardError => e
+    Rails.logger.error "[DataImportJob] Failed to create channel associations: #{e.message}"
+    # Don't fail the entire import if channel association fails
   end
 
   def update_data_import_status(processed_records, rejected_records)

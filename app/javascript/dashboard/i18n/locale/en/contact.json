@@ -320,7 +320,8 @@
           "CANCEL": "Cancel",
           "IMPORT": "Import",
           "SUCCESS_MESSAGE": "You will be notified via email when the import is complete.",
-          "ERROR_MESSAGE": "There was an error, please try again"
+          "ERROR_MESSAGE": "There was an error, please try again",
+          "ASSOCIATE_CHANNELS": "Associate contacts to channels automatically"
         },
         "EXPORT_CONTACT": {
           "TITLE": "Export contacts",

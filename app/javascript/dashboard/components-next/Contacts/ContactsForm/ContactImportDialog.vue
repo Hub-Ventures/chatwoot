@@ -10,6 +10,7 @@ const emit = defineEmits(['import']);
 const { t } = useI18n();
 
 const uiFlags = useMapGetter('contacts/getUIFlags');
+const inboxes = useMapGetter('inboxes/getInboxes');
 const isImportingContact = computed(() => uiFlags.value.isImporting);
 
 const dialogRef = ref(null);
@@ -17,6 +18,23 @@ const fileInput = ref(null);
 
 const hasSelectedFile = ref(null);
 const selectedFileName = ref('');
+const selectedChannelIds = ref([]);
+const associateToChannels = ref(false);
+
+// Filtrar canales compatibles (API, Email, WhatsApp, SMS, etc.)
+const availableChannels = computed(() => {
+  const compatibleTypes = [
+    'Channel::Api',
+    'Channel::Email',
+    'Channel::Whatsapp',
+    'Channel::Sms',
+    'Channel::TwilioSms',
+  ];
+
+  return inboxes.value.filter(inbox =>
+    compatibleTypes.includes(inbox.channel_type)
+  );
+});
 
 const csvUrl = '/downloads/import-contacts-sample.csv';
 
@@ -46,9 +64,48 @@ const handleRemoveFile = () => {
   selectedFileName.value = '';
 };
 
+const handleChannelToggle = channelId => {
+  const index = selectedChannelIds.value.indexOf(channelId);
+  if (index === -1) {
+    selectedChannelIds.value.push(channelId);
+  } else {
+    selectedChannelIds.value.splice(index, 1);
+  }
+};
+
+const selectAllChannels = () => {
+  selectedChannelIds.value = availableChannels.value.map(channel => channel.id);
+};
+
+const clearAllChannels = () => {
+  selectedChannelIds.value = [];
+};
+
+const handleAssociateToggle = () => {
+  associateToChannels.value = !associateToChannels.value;
+  if (!associateToChannels.value) {
+    selectedChannelIds.value = [];
+  }
+};
+
+const getChannelDisplayName = channel => {
+  const typeMap = {
+    'Channel::Api': 'API',
+    'Channel::Email': 'Email',
+    'Channel::Whatsapp': 'WhatsApp',
+    'Channel::Sms': 'SMS',
+    'Channel::TwilioSms': 'Twilio SMS',
+  };
+
+  const typeName = typeMap[channel.channel_type] || channel.channel_type;
+  return `${channel.name} (${typeName})`;
+};
+
 const uploadFile = async () => {
   if (!hasSelectedFile.value) return;
-  emit('import', hasSelectedFile.value);
+
+  const channelIds = associateToChannels.value ? selectedChannelIds.value : [];
+  emit('import', { file: hasSelectedFile.value, channelIds });
 };
 
 defineExpose({ dialogRef });
@@ -62,7 +119,7 @@ defineExpose({ dialogRef });
       t('CONTACTS_LAYOUT.HEADER.ACTIONS.IMPORT_CONTACT.IMPORT')
     "
     :is-loading="isImportingContact"
-    :disable-confirm-button="isImportingContact"
+    :disable-confirm-button="isImportingContact || !hasSelectedFile"
     @confirm="uploadFile"
   >
     <template #description>
@@ -82,7 +139,8 @@ defineExpose({ dialogRef });
       </p>
     </template>
 
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-4">
+      <!-- File Selection -->
       <div class="flex items-center gap-2">
         <label class="text-sm text-n-slate-12 whitespace-nowrap">
           {{ t('CONTACTS_LAYOUT.HEADER.ACTIONS.IMPORT_CONTACT.LABEL') }}
@@ -122,7 +180,106 @@ defineExpose({ dialogRef });
           </div>
         </div>
       </div>
+
+      <!-- Channel Association -->
+      <div class="flex flex-col gap-3">
+        <div class="flex items-center gap-2">
+          <input
+            id="associate-channels"
+            v-model="associateToChannels"
+            type="checkbox"
+            class="w-4 h-4"
+            @change="handleAssociateToggle"
+          />
+          <label
+            for="associate-channels"
+            class="text-sm text-n-slate-12 cursor-pointer"
+          >
+            {{
+              t(
+                'CONTACTS_LAYOUT.HEADER.ACTIONS.IMPORT_CONTACT.ASSOCIATE_CHANNELS'
+              )
+            }}
+          </label>
+        </div>
+
+        <div v-if="associateToChannels" class="ml-6 flex flex-col gap-3">
+          <p class="text-xs text-n-slate-11">
+            {{
+              t(
+                'CONTACTS_LAYOUT.HEADER.ACTIONS.IMPORT_CONTACT.CHANNEL_SELECTION.DESCRIPTION'
+              )
+            }}
+          </p>
+
+          <!-- Channel selection controls -->
+          <div class="flex items-center gap-2 text-xs">
+            <button
+              type="button"
+              class="text-n-blue-text hover:underline"
+              @click="selectAllChannels"
+            >
+              {{
+                t(
+                  'CONTACTS_LAYOUT.HEADER.ACTIONS.IMPORT_CONTACT.CHANNEL_SELECTION.SELECT_ALL'
+                )
+              }}
+            </button>
+            <span class="text-n-slate-11">{{ '|' }}</span>
+            <button
+              type="button"
+              class="text-n-blue-text hover:underline"
+              @click="clearAllChannels"
+            >
+              {{
+                t(
+                  'CONTACTS_LAYOUT.HEADER.ACTIONS.IMPORT_CONTACT.CHANNEL_SELECTION.DESELECT_ALL'
+                )
+              }}
+            </button>
+          </div>
+
+          <!-- Channel list -->
+          <div class="flex flex-col gap-2 max-h-40 overflow-y-auto">
+            <div
+              v-for="channel in availableChannels"
+              :key="channel.id"
+              class="flex items-center gap-2"
+            >
+              <input
+                :id="`channel-${channel.id}`"
+                :checked="selectedChannelIds.includes(channel.id)"
+                type="checkbox"
+                class="w-4 h-4"
+                @change="handleChannelToggle(channel.id)"
+              />
+              <label
+                :for="`channel-${channel.id}`"
+                class="text-sm text-n-slate-12 cursor-pointer"
+              >
+                {{ getChannelDisplayName(channel) }}
+              </label>
+            </div>
+          </div>
+
+          <p class="text-xs text-n-slate-11">
+            <strong
+            >{{
+                t(
+                  'CONTACTS_LAYOUT.HEADER.ACTIONS.IMPORT_CONTACT.CHANNEL_SELECTION.NOTE'
+                ).split(':')[0]
+              }}{{ ':' }}</strong
+            >
+            {{
+              t(
+                'CONTACTS_LAYOUT.HEADER.ACTIONS.IMPORT_CONTACT.CHANNEL_SELECTION.NOTE'
+              ).split(':')[1]
+            }}
+          </p>
+        </div>
+      </div>
     </div>
+
     <input
       ref="fileInput"
       type="file"

@@ -37,7 +37,10 @@ class Api::V1::Accounts::ContactsController < Api::V1::Accounts::BaseController
     render json: { error: I18n.t('errors.contacts.import.failed') }, status: :unprocessable_entity and return if params[:import_file].blank?
 
     ActiveRecord::Base.transaction do
-      import = Current.account.data_imports.create!(data_type: 'contacts')
+      import = Current.account.data_imports.create!(
+        data_type: 'contacts',
+        channel_ids: permitted_channel_ids
+      )
       import.import_file.attach(params[:import_file])
     end
 
@@ -126,6 +129,16 @@ class Api::V1::Accounts::ContactsController < Api::V1::Accounts::BaseController
 
     @resolved_contacts = @resolved_contacts.tagged_with(params[:labels], any: true) if params[:labels].present?
     @resolved_contacts
+  end
+
+  def permitted_channel_ids
+    return [] unless params[:channel_ids].present?
+
+    channel_ids = params[:channel_ids]
+    return [] unless channel_ids.is_a?(Array)
+
+    # Ensure all channel_ids are integers and belong to current account
+    channel_ids.map(&:to_i).select { |id| id.positive? }
   end
 
   def set_current_page

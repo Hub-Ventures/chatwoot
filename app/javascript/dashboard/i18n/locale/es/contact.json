@@ -319,7 +319,8 @@
           "CANCEL": "Cancelar",
           "IMPORT": "Importar",
           "SUCCESS_MESSAGE": "Se le notificará por correo electrónico cuando se complete la importación.",
-          "ERROR_MESSAGE": "Hubo un error, por favor inténtelo de nuevo"
+          "ERROR_MESSAGE": "Hubo un error, por favor inténtelo de nuevo",
+          "ASSOCIATE_CHANNELS": "Asociar contactos a canales automáticamente"
         },
         "EXPORT_CONTACT": {
           "TITLE": "Exportar contactos",

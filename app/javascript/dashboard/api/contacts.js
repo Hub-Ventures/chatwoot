@@ -72,9 +72,17 @@ class ContactAPI extends ApiClient {
     return axios.post(requestURL, queryPayload);
   }
 
-  importContacts(file) {
+  importContacts(file, channelIds = []) {
     const formData = new FormData();
     formData.append('import_file', file);
+
+    // Add channel_ids if provided
+    if (channelIds && channelIds.length > 0) {
+      channelIds.forEach(id => {
+        formData.append('channel_ids[]', id);
+      });
+    }
+
     return axios.post(`${this.url}/import`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });

@@ -1,0 +1,18 @@
+        "IMPORT_CONTACT": {
+          "TITLE": "Importar contactos",
+          "DESCRIPTION": "Importa tus contactos usando el archivo CSV.",
+          "LABEL": "Archivo",
+          "CHOOSE_FILE": "Elegir archivo",
+          "CHANGE": "Cambiar",
+          "DOWNLOAD_LABEL": "Descargar archivo de ejemplo",
+          "IMPORT": "Importar",
+          "SUCCESS_MESSAGE": "Contactos importados exitosamente",
+          "ERROR_MESSAGE": "No se pudo importar, verifica que el archivo sea correcto",
+          "ASSOCIATE_CHANNELS": "Asociar contactos a canales automáticamente",
+          "CHANNEL_SELECTION": {
+            "DESCRIPTION": "Selecciona los canales donde quieres que estén disponibles los contactos importados:",
+            "SELECT_ALL": "Seleccionar todos",
+            "DESELECT_ALL": "Deseleccionar todos",
+            "NOTE": "Nota: Los contactos podrán recibir campañas y mensajes a través de los canales seleccionados."
+          }
+        } 
