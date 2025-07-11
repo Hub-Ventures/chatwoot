@@ -1,35 +1,24 @@
 class Whatsapp::OneoffWhatsappCampaignService
   attr_reader :campaign
 
-  def initialize(campaign)
+  def initialize(campaign:)
     @campaign = campaign
   end
 
   def perform
-    # TODO: We should ideally be doing this in a background job
-    # to avoid blocking the server for a long time.
-    # We will iterate and improve this later.
-    success_count = 0
-    error_count = 0
+    # Validate campaign before executing
+    validate_campaign!
 
-    audience_contacts.find_each do |contact|
-      send_template_message_to_contact(contact)
-      success_count += 1
-    rescue StandardError => e
-      error_count += 1
-      Rails.logger.error "Failed to send campaign message to contact #{contact.id}: #{e.message}"
-      # Continue with next contact instead of failing entire campaign
-    end
-
-    Rails.logger.info "Campaign #{campaign.id} completed: #{success_count} successful, #{error_count} failed"
-    campaign.completed!
+    # Execute campaign in background job to avoid blocking the server
+    Whatsapp::OneoffCampaignJob.perform_later(campaign)
   end
 
-  private
-
   def audience_contacts
+    # Return empty relation if no audience
+    return campaign.account.contacts.none if campaign.audience.blank?
+
     # Filter by account_id for security and only include contacts with contact_inbox for this inbox
-    label_ids = campaign.audience.map { |label| label['id'] }
+    label_ids = campaign.audience.map { |label| label['id'] } # rubocop:disable Rails/Pluck
 
     campaign.account.contacts
             .joins(:labels, :contact_inboxes)
@@ -39,8 +28,11 @@ class Whatsapp::OneoffWhatsappCampaignService
   end
 
   def send_template_message_to_contact(contact)
-    # Contact inbox is guaranteed to exist due to the join in audience_contacts
-    contact_inbox = contact.contact_inboxes.find_by!(inbox_id: campaign.inbox_id)
+    # Find contact inbox - use find_by to avoid exception
+    contact_inbox = contact.contact_inboxes.find_by(inbox_id: campaign.inbox_id)
+
+    # Skip if contact doesn't have inbox (shouldn't happen with proper joins, but defensive)
+    return unless contact_inbox
 
     conversation = find_or_create_conversation(contact_inbox)
 
@@ -50,6 +42,19 @@ class Whatsapp::OneoffWhatsappCampaignService
       message_params
     )
     builder.perform
+  end
+
+  private
+
+  def validate_campaign!
+    raise ArgumentError, 'Campaign cannot be nil' if campaign.nil?
+    raise ArgumentError, 'Campaign is already completed' if campaign.completed?
+    raise ArgumentError, 'Campaign audience cannot be nil' if campaign.audience.nil?
+    raise ArgumentError, 'Campaign message cannot be blank' if campaign.message.blank?
+    raise ArgumentError, 'Campaign template_info cannot be nil' if campaign.template_info.nil?
+    raise ArgumentError, 'Campaign template_info must have name' if campaign.template_info['name'].blank?
+    raise ArgumentError, 'Campaign account must exist' unless campaign.account.present?
+    raise ArgumentError, 'Campaign inbox must exist' unless campaign.inbox.present?
   end
 
   def find_or_create_conversation(contact_inbox)
