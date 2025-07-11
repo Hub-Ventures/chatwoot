@@ -33,18 +33,10 @@ const formState = ref({
 const templates = computed(() => {
   if (!formState.value.inbox) return [];
 
-  // eslint-disable-next-line no-console
-  console.log('Selected inbox ID:', formState.value.inbox);
-  // eslint-disable-next-line no-console
-  console.log('Available WhatsApp inboxes:', whatsappInboxes.value);
-
   // Use the proper getter from the store to get WhatsApp templates
   const rawTemplates = store.getters['inboxes/getWhatsAppTemplates'](
     formState.value.inbox
   );
-
-  // eslint-disable-next-line no-console
-  console.log('Raw Templates from Store:', rawTemplates);
 
   // Map templates to ComboBox format - template object as value, name as label
   const mappedTemplates = rawTemplates
@@ -53,9 +45,6 @@ const templates = computed(() => {
       value: template, // Store the entire template object
       label: template.name,
     }));
-
-  // eslint-disable-next-line no-console
-  console.log('Mapped Templates:', mappedTemplates);
 
   return mappedTemplates;
 });
@@ -103,16 +92,18 @@ const handleSubmit = () => {
   v$.value.$touch();
   if (v$.value.$invalid) return;
 
-  // eslint-disable-next-line no-console
-  console.log('Form state at submit:', formState.value);
-  // eslint-disable-next-line no-console
-  console.log('Template at submit:', formState.value.template);
-
   // Get the template body from components
   const bodyComponent = formState.value.template.components?.find(
     component => component.type === 'BODY'
   );
   const templateBody = bodyComponent?.text || '';
+
+  // eslint-disable-next-line no-console
+  console.log('WhatsApp Campaign Submit:', {
+    template: formState.value.template,
+    templateParams: formState.value.templateParams,
+    templateBody,
+  });
 
   const campaignData = {
     title: formState.value.title,
@@ -127,7 +118,7 @@ const handleSubmit = () => {
       name: formState.value.template.name,
       language: formState.value.template.language,
       body: templateBody,
-      params: formState.value.templateParams,
+      processed_params: formState.value.templateParams,
     },
     message: formatMessage(templateBody, formState.value.templateParams),
   };
