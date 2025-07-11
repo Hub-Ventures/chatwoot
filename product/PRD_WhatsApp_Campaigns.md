@@ -1,5 +1,7 @@
 # Product Requirements Document (PRD): Campañas de WhatsApp
 
+**Estado del Proyecto:** 🟡 **Funcional con Gap Crítico** - Las campañas básicas funcionan, pero falta previsualización de mensajes con parámetros.
+
 **1. Introducción**
 
 *   **Funcionalidad:** Campañas proactivas basadas en plantillas a través de WhatsApp.
@@ -8,30 +10,99 @@
 
 **2. User Stories**
 
+### **✅ Completadas:**
 *   **Como Administrador,** quiero poder crear una campaña "one-off" seleccionando una de mis plantillas de WhatsApp aprobadas, para poder enviar notificaciones y mensajes de marketing que cumplan con las políticas de Meta.
 *   **Como Administrador,** quiero poder seleccionar una audiencia para mi campaña basada en etiquetas de contacto, para poder enviar mensajes relevantes al grupo correcto de usuarios.
-*   **Como Administrador,** quiero poder rellenar las variables de la plantilla (ej. nombre del cliente, número de pedido) antes de enviar la campaña, para poder personalizar la comunicación a escala.
 *   **Como Administrador,** quiero poder programar la campaña para una fecha y hora futuras, para poder planificar mis actividades de comunicación con antelación.
+
+### **🚧 Gap Crítico Identificado:**
+*   **Como Administrador,** quiero poder rellenar las variables de la plantilla (ej. nombre del cliente, número de pedido) **Y VER UNA PREVISUALIZACIÓN en tiempo real** antes de enviar la campaña, para poder personalizar la comunicación a escala **con confianza de que el mensaje se ve correcto**.
+
+### **🔥 Nuevas User Stories Críticas:**
+*   **Como Administrador,** quiero ver una previsualización en tiempo real del mensaje final mientras relleno los parámetros, para asegurarme de que el texto se ve correcto antes del envío.
+*   **Como Administrador,** quiero recibir validación visual si faltan parámetros obligatorios, para evitar enviar mensajes incompletos o rotos.
+*   **Como Administrador,** quiero ver el formato del mensaje similar a como aparecería en WhatsApp, para tener una representación fiel del resultado final.
 
 **3. Requisitos**
 
+### **✅ Completados (Julio 2025):**
+
 *   **Flujo de Creación de Campaña (UI/UX):**
-    *   Al crear una campaña "One-off", si se selecciona un inbox de WhatsApp, el formulario debe cambiar dinámicamente.
-    *   El campo de mensaje de texto libre debe ser reemplazado por un selector desplegable de "Plantillas de WhatsApp".
-    *   Este selector debe poblarse con las plantillas disponibles para el inbox seleccionado.
-    *   Al seleccionar una plantilla, deben aparecer dinámicamente campos de texto para cada una de sus variables (ej. `{{1}}`, `{{2}}`).
-    *   Se debe mostrar una vista previa simple del mensaje con las variables rellenas.
+    *   ✅ Al crear una campaña "One-off", si se selecciona un inbox de WhatsApp, el formulario cambia dinámicamente.
+    *   ✅ El campo de mensaje de texto libre es reemplazado por un selector desplegable de "Plantillas de WhatsApp".
+    *   ✅ El selector se pobla con las plantillas disponibles para el inbox seleccionado.
+    *   ✅ Al seleccionar una plantilla, aparecen dinámicamente campos de texto para cada variable (ej. `{{1}}`, `{{2}}`).
+    *   ❌ **FALTANTE:** Vista previa del mensaje con las variables rellenas.
+
 *   **Backend:**
-    *   El modelo `Campaign` debe soportar el tipo de inbox `Whatsapp`.
-    *   Un nuevo servicio (`Whatsapp::OneoffWhatsappCampaignService`) debe orquestar el envío masivo.
-    *   El servicio debe iterar sobre la audiencia y poner en cola trabajos individuales para enviar el mensaje de plantilla a cada contacto.
-*   **Fuera del Alcance (MVP):**
-    *   Analíticas avanzadas (tasas de entrega, lectura, etc.).
-    *   Pruebas A/B.
-    *   Constructor de audiencias complejo (más allá de las etiquetas).
+    *   ✅ El modelo `Campaign` soporta el tipo de inbox `Whatsapp`.
+    *   ✅ Servicio `Whatsapp::OneoffWhatsappCampaignService` implementado y funcional.
+    *   ✅ El servicio itera sobre la audiencia y envía mensajes de plantilla a cada contacto.
+    *   ✅ Integración exitosa con WhatsApp Cloud API.
+    *   ✅ Creación automática de conversaciones para campañas.
+    *   ✅ Seguimiento de estado de campañas (Programado → Completado).
+
+### **🚧 Gap Crítico - Requisitos Faltantes:**
+
+*   **Previsualización y Validación (UI/UX):**
+    *   ◻️ Componente de previsualización en tiempo real del mensaje final
+    *   ◻️ Procesamiento visual de parámetros `{{1}}`, `{{2}}`, etc. en tiempo real
+    *   ◻️ Validación de campos obligatorios con indicadores visuales
+    *   ◻️ Advertencias si faltan parámetros requeridos antes del envío
+    *   ◻️ Formateo visual similar al aspecto de WhatsApp real
+    *   ◻️ Actualización instantánea de la vista previa al cambiar parámetros
+
+*   **Lógica de Validación (Backend/Frontend):**
+    *   ◻️ Validación de que todos los parámetros requeridos estén llenos
+    *   ◻️ Prevención de envío de campañas con parámetros faltantes
+    *   ◻️ Manejo de errores cuando los parámetros no coinciden con la plantilla
 
 **4. Métricas de Éxito**
 
+### **✅ Métricas Actuales (Funcionalidad Básica):**
 *   **Adopción:** Nº de campañas de WhatsApp creadas por semana.
 *   **Uso:** Nº de mensajes enviados a través de campañas de WhatsApp.
-*   **Feedback Cualitativo:** Opiniones de los usuarios sobre la facilidad de uso y el valor aportado. 
+*   **Funcionalidad:** Tasa de éxito de envío de campañas (actualmente 100% técnico).
+
+### **🎯 Métricas Objetivo (Post-Previsualización):**
+*   **Confianza del Usuario:** % de campañas enviadas sin modificaciones después de ver la previsualización.
+*   **Reducción de Errores:** % de reducción en campañas con parámetros incorrectos o faltantes.
+*   **Satisfacción UX:** Puntuación de satisfacción del usuario con la experiencia de creación de campañas.
+*   **Feedback Cualitativo:** Opiniones de los usuarios sobre la facilidad de uso y el valor aportado.
+
+---
+
+## **5. Estado Actual del Proyecto**
+
+### **✅ Lo que Funciona:**
+- **Funcionalidad Técnica Completa:** Las campañas se crean, programan y envían exitosamente
+- **Integración WhatsApp:** Conectado correctamente con WhatsApp Cloud API  
+- **Selector de Plantillas:** Carga y muestra plantillas disponibles dinámicamente
+- **Campos de Parámetros:** Genera automáticamente campos para `{{1}}`, `{{2}}`, etc.
+- **Segmentación:** Selección de audiencia por etiquetas funcional
+- **Programación:** Fechas y horas de envío futuras operativas
+
+### **❌ Gap Crítico Identificado:**
+- **Experiencia "Ciega":** Los usuarios envían campañas sin saber cómo se verá el mensaje final
+- **Sin Validación Visual:** No hay indicadores si faltan parámetros obligatorios
+- **Falta de Confianza:** Los usuarios no pueden verificar que el texto se ve correcto
+
+---
+
+## **6. Próximos Pasos Críticos**
+
+### **🔥 Prioridad 1: Previsualización de Mensajes (P1.5)**
+- **Objetivo:** Completar la experiencia de usuario para campañas de WhatsApp
+- **Entregables:** Componente de previsualización en tiempo real con validación
+- **Impacto:** Convertir funcionalidad técnica en experiencia de usuario completa
+
+### **📋 Fuera del Alcance (Versión Actual):**
+*   Analíticas avanzadas (tasas de entrega, lectura, etc.).
+*   Pruebas A/B.
+*   Constructor de audiencias complejo (más allá de las etiquetas).
+*   Plantillas con imágenes o botones interactivos.
+
+---
+
+*Última actualización: Julio 10, 2025*  
+*Estado: 🟡 Funcional con Gap Crítico - Requiere P1.5 para experiencia completa* 

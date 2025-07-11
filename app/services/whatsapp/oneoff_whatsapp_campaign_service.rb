@@ -9,23 +9,38 @@ class Whatsapp::OneoffWhatsappCampaignService
     # TODO: We should ideally be doing this in a background job
     # to avoid blocking the server for a long time.
     # We will iterate and improve this later.
-    audience_contacts.each do |contact|
+    success_count = 0
+    error_count = 0
+
+    audience_contacts.find_each do |contact|
       send_template_message_to_contact(contact)
+      success_count += 1
+    rescue StandardError => e
+      error_count += 1
+      Rails.logger.error "Failed to send campaign message to contact #{contact.id}: #{e.message}"
+      # Continue with next contact instead of failing entire campaign
     end
+
+    Rails.logger.info "Campaign #{campaign.id} completed: #{success_count} successful, #{error_count} failed"
     campaign.completed!
   end
 
   private
 
   def audience_contacts
-    # This assumes audience is an array of label IDs
+    # Filter by account_id for security and only include contacts with contact_inbox for this inbox
     label_ids = campaign.audience.map { |label| label['id'] }
-    Contact.joins(:labels).where(labels: { id: label_ids }).distinct
+
+    campaign.account.contacts
+            .joins(:labels, :contact_inboxes)
+            .where(labels: { id: label_ids })
+            .where(contact_inboxes: { inbox_id: campaign.inbox_id })
+            .distinct
   end
 
   def send_template_message_to_contact(contact)
-    contact_inbox = contact.contact_inboxes.find_by(inbox_id: campaign.inbox_id)
-    return unless contact_inbox
+    # Contact inbox is guaranteed to exist due to the join in audience_contacts
+    contact_inbox = contact.contact_inboxes.find_by!(inbox_id: campaign.inbox_id)
 
     conversation = find_or_create_conversation(contact_inbox)
 

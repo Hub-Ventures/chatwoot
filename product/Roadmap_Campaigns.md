@@ -29,6 +29,20 @@
     *   **Dependencias:** Ninguna.
     *   **Fecha de Finalización:** Julio 2025
 
+*   **P1.5: Previsualización y Manejo de Parámetros en Plantillas**
+    *   **Estado:** 🚧 Crítico - Faltante en implementación actual
+    *   **Descripción:** Implementar previsualización en tiempo real del mensaje final con parámetros llenos y validación de campos obligatorios en plantillas de WhatsApp.
+    *   **Problema Actual:** Las campañas de WhatsApp se envían pero los usuarios no pueden ver cómo se verá el mensaje final antes del envío, creando una experiencia ciega.
+    *   **Hitos Clave:**
+        *   ◻️ Implementar componente de previsualización en tiempo real en el formulario
+        *   ◻️ Procesar parámetros `{{1}}`, `{{2}}`, etc. y mostrar el texto final
+        *   ◻️ Validar que todos los parámetros requeridos estén llenos
+        *   ◻️ Mostrar advertencias si faltan parámetros obligatorios
+        *   ◻️ Implementar formateo visual similar al mensaje real de WhatsApp
+    *   **Impacto UX:** Alto - Sin esto, los usuarios envían campañas "a ciegas"
+    *   **Dependencias:** P1 completado.
+    *   **Prioridad:** 🔥 Alta - Gap crítico en la experiencia actual
+
 *   **P2: Campañas de Email (MVP)**
     *   **Estado:** ⏳ Pendiente
     *   **Descripción:** Permitir el envío de campañas "one-off" a través de inboxes de Email. Incluirá campo de "asunto" y gestión de enlaces para darse de baja.
@@ -76,21 +90,25 @@
 ## **Resumen de Progreso**
 
 ### **Estadísticas Generales:**
-- **Total de Features:** 7
+- **Total de Features:** 8
 - **Completadas:** 1 ✅
-- **En Progreso:** 0 🚧  
+- **En Progreso/Críticas:** 1 🚧🔥  
 - **Pendientes:** 6 ⏳
 
 ### **Hitos Recientes:**
-- **Julio 2025:** ✅ **Campañas de WhatsApp completadas**
+- **Julio 2025:** ✅ **Campañas de WhatsApp completadas** (funcionalidad básica)
   - Implementación completa del formulario con selector de plantillas
   - Integración exitosa con WhatsApp Cloud API
   - Sistema de programación y envío masivo funcional
   - Seguimiento de estado de campañas operativo
 
-### **Próximos Pasos:**
-1. **P2: Campañas de Email** - Próxima prioridad para completar la Fase 1
-2. **P3: Analíticas de Campaña v1** - Fundamental para empezar la Fase 2
+### **Próximos Pasos Críticos:**
+1. **🔥 P1.5: Previsualización y Manejo de Parámetros** - **CRÍTICO** para completar la experiencia de WhatsApp
+2. **P2: Campañas de Email** - Completar la Fase 1
+3. **P3: Analíticas de Campaña v1** - Iniciar la Fase 2
+
+### **Gap Identificado:**
+- **⚠️ Experiencia Incompleta:** Las campañas de WhatsApp funcionan técnicamente, pero los usuarios no pueden previsualizar el mensaje final con parámetros, creando una experiencia "ciega" al enviar campañas.
 
 ---
 
