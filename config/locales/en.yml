@@ -93,10 +93,18 @@ en:
       missing_template_name: Campaign template info must have name
       account_not_found: Campaign account must exist
       inbox_not_found: Campaign inbox must exist
-      too_many_contacts: "Campaign exceeds safety limit of %{limit} contacts. Found %{count} contacts."
-      no_contacts_found: "No contacts found for the selected audience"
-      too_many_failures: "Campaign stopped due to too many failures"
-      timeout_error: "Campaign timed out after %{duration}"
+      too_many_contacts: 'Campaign exceeds safety limit of %{limit} contacts. Found %{count} contacts.'
+      no_contacts_found: 'No contacts found for the selected audience'
+      too_many_failures: 'Campaign stopped due to too many failures'
+      timeout_error: 'Campaign timed out after %{duration}'
+
+  activerecord:
+    errors:
+      models:
+        campaign:
+          attributes:
+            title:
+              taken: 'A campaign with this name already exists in your account'
   reports:
     period: Reporting period %{since} to %{until}
     utc_warning: The report generated is in UTC timezone

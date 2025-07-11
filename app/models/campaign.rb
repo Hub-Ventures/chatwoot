@@ -33,7 +33,7 @@ class Campaign < ApplicationRecord
   include UrlHelper
   validates :account_id, presence: true
   validates :inbox_id, presence: true
-  validates :title, presence: true
+  validates :title, presence: true, uniqueness: { scope: :account_id }
   validates :message, presence: true
   validate :validate_campaign_inbox
   validate :validate_url

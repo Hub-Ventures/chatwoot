@@ -23,23 +23,9 @@ const isFetchingCampaigns = computed(() => uiFlags.value.isFetching);
 
 const confirmDeleteCampaignDialogRef = ref(null);
 
-const SMSCampaigns = computed(() => {
-  const allOneOffCampaigns = getters['campaigns/getCampaigns'].value(
-    CAMPAIGN_TYPES.ONE_OFF
-  );
-  const inboxesMap = getters['inboxes/getInboxes'].value;
-
-  return allOneOffCampaigns.filter(campaign => {
-    const campaignInbox = inboxesMap.find(
-      inbox => inbox.id === campaign.inbox_id
-    );
-    return (
-      campaignInbox &&
-      (campaignInbox.channel_type === 'Channel::Sms' ||
-        campaignInbox.channel_type === 'Channel::TwilioSms')
-    );
-  });
-});
+const SMSCampaigns = computed(() =>
+  getters['campaigns/getCampaigns'].value(CAMPAIGN_TYPES.ONE_OFF)
+);
 
 const hasNoSMSCampaigns = computed(
   () => SMSCampaigns.value?.length === 0 && !isFetchingCampaigns.value
