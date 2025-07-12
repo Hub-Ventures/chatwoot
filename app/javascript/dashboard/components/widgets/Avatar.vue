@@ -42,14 +42,19 @@ export default {
 @tailwind components;
 @layer components {
   .avatar-color {
-    background-image: linear-gradient(to top, #c2e1ff 0%, #d6ebff 100%);
+    background-image: linear-gradient(to top, #ebebfe 0%, #f3e8ff 100%);
   }
 
   .dark-avatar-color {
-    background-image: linear-gradient(to top, #135899 0%, #135899 100%);
+    background-image: linear-gradient(to top, #342569 0%, #482569 100%);
   }
 }
 .avatar-container {
-  @apply flex leading-[100%] font-medium items-center justify-center text-center cursor-default avatar-color dark:dark-avatar-color text-n-blue-text;
+  @apply flex leading-[100%] font-medium items-center justify-center text-center cursor-default avatar-color dark:dark-avatar-color;
+  color: #8b55f6;
+}
+
+.dark .avatar-container {
+  color: #a19eff;
 }
 </style>
