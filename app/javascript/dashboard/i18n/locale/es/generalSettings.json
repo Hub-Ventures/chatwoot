@@ -45,32 +45,32 @@
         "NOTE": "Este ID es necesario si estás construyendo una integración basada en API"
       },
       "AUTO_RESOLVE": {
-        "TITLE": "Auto-resolve conversations",
-        "NOTE": "This configuration would allow you to automatically resolve the conversation after a certain period of inactivity.",
+        "TITLE": "Resolver conversaciones automáticamente",
+        "NOTE": "Esta configuración te permitirá resolver automáticamente la conversación después de un cierto período de inactividad.",
         "DURATION": {
-          "LABEL": "Inactivity duration",
-          "HELP": "Time period of inactivity after which conversation is auto-resolved",
+          "LABEL": "Duración de inactividad",
+          "HELP": "Período de tiempo de inactividad después del cual la conversación se resuelve automáticamente",
           "PLACEHOLDER": "30",
-          "ERROR": "Auto resolve duration should be between 10 minutes and 999 days",
+          "ERROR": "La duración de resolución automática debe estar entre 10 minutos y 999 días",
           "API": {
-            "SUCCESS": "Auto resolve settings updated successfully",
-            "ERROR": "Failed to update auto resolve settings"
+            "SUCCESS": "Configuración de resolución automática actualizada exitosamente",
+            "ERROR": "Error al actualizar la configuración de resolución automática"
           }
         },
         "MESSAGE": {
-          "LABEL": "Custom auto-resolution message",
-          "PLACEHOLDER": "Conversation was marked resolved by system due to 15 days of inactivity",
-          "HELP": "Message sent to the customer after conversation is auto-resolved"
+          "LABEL": "Mensaje personalizado de resolución automática",
+          "PLACEHOLDER": "La conversación fue marcada como resuelta por el sistema debido a 15 días de inactividad",
+          "HELP": "Mensaje enviado al cliente después de que la conversación se resuelve automáticamente"
         },
         "PREFERENCES": "Preferencias",
         "LABEL": {
-          "LABEL": "Add label after auto-resolution",
-          "PLACEHOLDER": "Select a label"
+          "LABEL": "Agregar etiqueta después de la resolución automática",
+          "PLACEHOLDER": "Seleccionar una etiqueta"
         },
         "IGNORE_WAITING": {
-          "LABEL": "Skip conversations waiting for agent’s reply"
+          "LABEL": "Omitir conversaciones esperando respuesta del agente"
         },
-        "UPDATE_BUTTON": "Save Changes"
+        "UPDATE_BUTTON": "Guardar Cambios"
       },
       "NAME": {
         "LABEL": "Nombre de cuenta",
@@ -93,47 +93,48 @@
         "ERROR": ""
       },
       "AUTO_RESOLVE_IGNORE_WAITING": {
-        "LABEL": "Exclude unattended conversations",
-        "HELP": "When enabled, the system will skip resolving conversations that are still waiting for an agent's reply."
+        "LABEL": "Excluir conversaciones desatendidas",
+        "HELP": "Cuando está habilitado, el sistema omitirá resolver conversaciones que aún esperan la respuesta de un agente."
       },
       "AUDIO_TRANSCRIPTION": {
-        "TITLE": "Transcribe Audio Messages",
-        "NOTE": "Automatically transcribe audio messages in conversations. Generate a text transcript whenever an audio message is sent or received, and display it alongside the message.",
+        "TITLE": "Transcribir Mensajes de Audio",
+        "NOTE": "Transcribir automáticamente mensajes de audio en conversaciones. Generar una transcripción de texto cada vez que se envía o recibe un mensaje de audio, y mostrarlo junto al mensaje.",
         "API": {
-          "SUCCESS": "Audio transcription setting updated successfully",
-          "ERROR": "Failed to update audio transcription setting"
+          "SUCCESS": "Configuración de transcripción de audio actualizada exitosamente",
+          "ERROR": "Error al actualizar la configuración de transcripción de audio"
         }
       },
       "AUTO_RESOLVE_DURATION": {
-        "LABEL": "Inactivity duration for resolution",
-        "HELP": "Duration after a conversation should auto resolve if there is no activity",
+        "LABEL": "Duración de inactividad para resolución",
+        "HELP": "Duración después de la cual una conversación debe resolverse automáticamente si no hay actividad",
         "PLACEHOLDER": "30",
-        "ERROR": "Auto resolve duration should be between 10 minutes and 999 days",
+        "ERROR": "La duración de resolución automática debe estar entre 10 minutos y 999 días",
         "API": {
-          "SUCCESS": "Auto resolve settings updated successfully",
-          "ERROR": "Failed to update auto resolve settings"
+          "SUCCESS": "Configuración de resolución automática actualizada exitosamente",
+          "ERROR": "Error al actualizar la configuración de resolución automática"
         },
         "UPDATE_BUTTON": "Actualizar",
-        "MESSAGE_LABEL": "Custom resolution message",
-        "MESSAGE_PLACEHOLDER": "Conversation was marked resolved by system due to 15 days of inactivity",
-        "MESSAGE_HELP": "This message is sent to the customer when a conversation is automatically resolved by the system due to inactivity."
+        "MESSAGE_LABEL": "Mensaje personalizado de resolución",
+        "MESSAGE_PLACEHOLDER": "La conversación fue marcada como resuelta por el sistema debido a 15 días de inactividad",
+        "MESSAGE_HELP": "Este mensaje se envía al cliente cuando una conversación es resuelta automáticamente por el sistema debido a inactividad."
       },
       "FEATURES": {
         "INBOUND_EMAIL_ENABLED": "Continuidad de la conversación con emails está habilitada para su cuenta.",
         "CUSTOM_EMAIL_DOMAIN_ENABLED": "Ahora puede recibir emails en su dominio personalizado."
       }
     },
-    "UPDATE_CHATWOOT": "Hay una actualización {latestChatwootVersion} para Chatwoot disponible. Por favor, actualiza tu instancia.",
+          "UPDATE_CHATWOOT": "Hay una actualización {latestChatwootVersion} para {installationName} disponible. Por favor, actualiza tu instancia.",
     "LEARN_MORE": "Más información",
-    "PAYMENT_PENDING": "Tu pago está pendiente. Por favor actualiza tu información de pago para seguir usando Chatwoot",
-    "UPGRADE": "Upgrade to continue using Chatwoot",
-    "LIMITS_UPGRADE": "Su cuenta ha excedido los límites de uso, por favor actualice su plan para seguir usando Chatwoot",
+          "PAYMENT_PENDING": "Tu pago está pendiente. Por favor actualiza tu información de pago para seguir usando {installationName}",
+          "UPGRADE": "Actualizar para continuar usando {installationName}",
+          "LIMITS_UPGRADE": "Su cuenta ha excedido los límites de uso, por favor actualice su plan para seguir usando {installationName}",
     "OPEN_BILLING": "Abrir facturación"
   },
   "FORMS": {
     "MULTISELECT": {
       "ENTER_TO_SELECT": "Pulse Enter para seleccionar",
       "ENTER_TO_REMOVE": "Presione Enter para eliminar",
+      "NO_OPTIONS": "La lista está vacía",
       "SELECT_ONE": "Seleccione uno",
       "SELECT": "Seleccionar"
     }

@@ -19,20 +19,20 @@
       "ASK_ADMIN": "Por favor, comuníquese con su administrador para la actualización."
     },
     "LIST": {
-      "404": "There are no custom roles available in this account.",
-      "TITLE": "Manage custom roles",
-      "DESC": "Custom roles are roles that are created by the account owner or admin. These roles can be assigned to agents to define their access and permissions within the account. Custom roles can be created with specific permissions and access levels to suit the requirements of the organization.",
+      "404": "No hay roles personalizados disponibles en esta cuenta.",
+      "TITLE": "Gestionar roles personalizados",
+      "DESC": "Los roles personalizados son roles que son creados por el propietario de la cuenta o el administrador. Estos roles pueden ser asignados a agentes para definir su acceso y permisos dentro de la cuenta. Los roles personalizados pueden ser creados con permisos y niveles de acceso específicos para adaptarse a los requerimientos de la organización.",
       "TABLE_HEADER": {
         "NAME": "Nombre",
         "DESCRIPTION": "Descripción",
-        "PERMISSIONS": "Permissions",
+        "PERMISSIONS": "Permisos",
         "ACTIONS": "Acciones"
       }
     },
     "PERMISSIONS": {
-      "CONVERSATION_MANAGE": "Manage all conversations",
-      "CONVERSATION_UNASSIGNED_MANAGE": "Manage unassigned conversations and those assigned to them",
-      "CONVERSATION_PARTICIPATING_MANAGE": "Manage participating conversations and those assigned to them",
+      "CONVERSATION_MANAGE": "Administrar todas las conversaciones",
+      "CONVERSATION_UNASSIGNED_MANAGE": "Administrar conversaciones no asignadas y las asignadas a ellas",
+      "CONVERSATION_PARTICIPATING_MANAGE": "Administrar conversaciones participantes y las asignadas a ellas",
       "CONTACT_MANAGE": "Administrar contactos",
       "REPORT_MANAGE": "Administrar informes",
       "KNOWLEDGE_BASE_MANAGE": "Administrar base de conocimiento"
@@ -54,7 +54,7 @@
       },
       "CANCEL_BUTTON_TEXT": "Cancelar",
       "API": {
-        "ERROR_MESSAGE": "No se pudo conectar al servidor Woot, por favor inténtalo de nuevo más tarde"
+        "ERROR_MESSAGE": "No se pudo conectar al servidor, por favor inténtalo de nuevo más tarde"
       }
     },
     "ADD": {
@@ -78,7 +78,7 @@
       "BUTTON_TEXT": "Eliminar",
       "API": {
         "SUCCESS_MESSAGE": "Rol personalizado eliminado con éxito.",
-        "ERROR_MESSAGE": "No se pudo conectar al servidor Woot, por favor inténtalo de nuevo más tarde"
+        "ERROR_MESSAGE": "No se pudo conectar al servidor {installationName}, por favor inténtalo de nuevo más tarde"
       },
       "CONFIRM": {
         "TITLE": "Confirme eliminación",
