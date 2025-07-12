@@ -14,32 +14,37 @@ const {
 } = require('@radix-ui/colors');
 
 export const colors = {
+  // Actualizar woot a paleta violeta (Yampi inspired)
   woot: {
-    25: blue.blue2,
-    50: blue.blue3,
-    75: blue.blue4,
-    100: blue.blue5,
-    200: blue.blue7,
-    300: blue.blue8,
-    400: blueDark.blue11,
-    500: blueDark.blue10,
-    600: blueDark.blue9,
-    700: blueDark.blue8,
-    800: blueDark.blue6,
-    900: blueDark.blue2,
+    25: '#fefcff', // iris-1 equivalent
+    50: '#fbf8ff', // iris-2 equivalent  
+    75: '#f5eeff', // iris-3 equivalent
+    100: '#ede0ff', // iris-4 equivalent
+    200: '#e2ceff', // iris-5 equivalent
+    300: '#d4b9ff', // iris-6 equivalent
+    400: '#c4a1fc', // iris-7 equivalent
+    500: '#b184f7', // iris-8 equivalent
+    600: '#8b55f6', // iris-9 equivalent (primary)
+    700: '#7c46e9', // iris-10 equivalent
+    800: '#6d3bdb', // iris-11 equivalent
+    900: '#341e6d', // iris-12 equivalent
   },
+  
+  // Mantener green pero más vibrante (teal-inspired)
   green: {
-    50: greenDark.green12,
-    100: green.green6,
-    200: green.green7,
-    300: green.green8,
-    400: greenDark.green10,
-    500: greenDark.green9,
-    600: green.green10,
-    700: green.green11,
-    800: greenDark.green7,
-    900: greenDark.green6,
+    50: '#fbfefe',
+    100: '#f4fcfb',
+    200: '#e2f9f6',
+    300: '#cff4ef',
+    400: '#baeee6',
+    500: '#a5e3db',
+    600: '#86d4cd',
+    700: '#5ec0b8',
+    800: '#2db3a8',
+    900: '#134d49',
   },
+  
+  // Actualizar yellow/amber
   yellow: {
     50: yellow.yellow2,
     100: yellow.yellow3,
@@ -52,58 +57,66 @@ export const colors = {
     800: yellowDark.yellow2,
     900: yellowDark.yellow1,
   },
+  
+  // Actualizar slate con tinte violeta
   slate: {
-    25: slate.slate2,
-    50: slate.slate3,
-    75: slate.slate4,
-    100: slate.slate5,
-    200: slate.slate7,
-    300: slate.slate8,
-    400: slateDark.slate11,
-    500: slateDark.slate10,
-    600: slate.slate11,
-    700: slateDark.slate8,
-    800: slateDark.slate4,
-    900: slateDark.slate1,
+    25: '#fdfdff',
+    50: '#fafafe',
+    75: '#f3f3f9',
+    100: '#ebebf2',
+    200: '#e3e3ec',
+    300: '#dbdbe6',
+    400: '#cfcfdc',
+    500: '#bcbccd',
+    600: '#8e8ea2',
+    700: '#838398',
+    800: '#636373',
+    900: '#1f1f28',
   },
+  
+  // Mantener black similar
   black: {
-    50: slate.slate2,
-    100: slateDark.slate12,
-    200: slate.slate7,
-    300: slate.slate8,
-    400: slateDark.slate11,
-    500: slate.slate9,
-    600: slateDark.slate9,
-    700: slateDark.slate8,
-    800: slateDark.slate7,
-    900: slateDark.slate2,
+    50: '#fdfdfd',
+    100: '#f0f0f0',
+    200: '#e3e3ec',
+    300: '#ebebf2',
+    400: '#bcbccd',
+    500: '#8e8ea2',
+    600: '#838398',
+    700: '#636373',
+    800: '#4a4a5a',
+    900: '#1f1f28',
   },
+  
+  // Actualizar red a magenta vibrante (ruby-inspired)
   red: {
-    50: redDark.red12,
-    100: red.red6,
-    200: red.red8,
-    300: redDark.red11,
-    400: redDark.red10,
-    500: red.red9,
-    600: red.red10,
-    700: red.red11,
-    800: redDark.red8,
-    900: red.red12,
+    50: '#fffcfe',
+    100: '#fff7fb',
+    200: '#ffedf6',
+    300: '#ffe0f0',
+    400: '#ffd1e9',
+    500: '#fcc0e0',
+    600: '#f7acd4',
+    700: '#f193c5',
+    800: '#ec4899', // magenta vibrante
+    900: '#5f1840',
   },
+  
+  // Mantener violet pero actualizar tonos
   violet: {
     50: violet.violet1,
     100: violetDark.violet12,
     200: violet.violet6,
     300: violet.violet8,
     400: violet.violet11,
-    500: violet.violet9,
+    500: '#8b55f6', // violeta primario Yampi
     600: violetDark.violet8,
     700: violetDark.violet7,
     800: violetDark.violet6,
     900: violet.violet12,
   },
 
-  // next design system color
+  // next design system color - mantener estructura
   n: {
     slate: {
       1: 'rgb(var(--slate-1) / <alpha-value>)',
@@ -211,7 +224,7 @@ export const colors = {
     },
 
     black: '#000000',
-    brand: '#2781F6',
+    brand: '#8B55F6', // Nuevo color brand violeta Yampi
     background: 'rgb(var(--background-color) / <alpha-value>)',
     solid: {
       1: 'rgb(var(--solid-1) / <alpha-value>)',
