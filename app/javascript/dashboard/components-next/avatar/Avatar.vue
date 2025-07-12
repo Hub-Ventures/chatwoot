@@ -48,22 +48,22 @@ const fileInput = ref(null);
 
 const AVATAR_COLORS = {
   dark: [
-    ['#4B143D', '#FF8DCC'],
-    ['#3F220D', '#FFA366'],
-    ['#2A2A2A', '#ADB1B8'],
-    ['#023B37', '#0BD8B6'],
-    ['#27264D', '#A19EFF'],
-    ['#1D2E62', '#9EB1FF'],
+    ['#342569', '#A19EFF'], // Violeta principal
+    ['#5B143D', '#FF92CC'], // Magenta vibrante
+    ['#2D523C', '#4AECC4'], // Teal moderno
+    ['#6B4423', '#FFB366'], // Amber cálido
+    ['#482569', '#B19EFF'], // Violeta secundario
+    ['#3D2569', '#9B85FF'], // Violeta terciario
   ],
   light: [
-    ['#FBDCEF', '#C2298A'],
-    ['#FFE0BB', '#99543A'],
-    ['#E8E8E8', '#60646C'],
-    ['#CCF3EA', '#008573'],
-    ['#EBEBFE', '#4747C2'],
-    ['#E1E9FF', '#3A5BC7'],
+    ['#EBEBFE', '#8B55F6'], // Violeta principal Yampi
+    ['#FBDCEF', '#E23B99'], // Magenta vibrante
+    ['#CCF3EA', '#059669'], // Teal elegante
+    ['#FFF4E6', '#D97706'], // Amber moderno
+    ['#F3E8FF', '#7C3AED'], // Violeta secundario
+    ['#EDE9FE', '#6366F1'], // Índigo complementario
   ],
-  default: { bg: '#E8E8E8', text: '#60646C' },
+  default: { bg: '#EBEBFE', text: '#8B55F6' },
 };
 
 const STATUS_CLASSES = {

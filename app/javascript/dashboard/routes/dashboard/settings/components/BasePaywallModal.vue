@@ -30,7 +30,7 @@ const emit = defineEmits(['upgrade']);
   >
     <div class="flex items-center w-full gap-2 mb-4">
       <span
-        class="flex items-center justify-center w-6 h-6 rounded-full bg-n-solid-blue"
+        class="flex items-center justify-center w-6 h-6 rounded-full bg-n-solid-iris"
       >
         <Icon
           class="flex-shrink-0 text-n-brand size-[14px]"
