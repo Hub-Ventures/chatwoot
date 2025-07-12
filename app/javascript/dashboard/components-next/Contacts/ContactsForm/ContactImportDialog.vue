@@ -225,6 +225,7 @@ defineExpose({ dialogRef });
                 )
               }}
             </button>
+            <!-- eslint-disable-next-line @intlify/vue-i18n/no-raw-text -->
             <span class="text-n-slate-11">{{ '|' }}</span>
             <button
               type="button"
@@ -264,7 +265,7 @@ defineExpose({ dialogRef });
 
           <p class="text-xs text-n-slate-11">
             <strong
-            >{{
+              >{{
                 t(
                   'CONTACTS_LAYOUT.HEADER.ACTIONS.IMPORT_CONTACT.CHANNEL_SELECTION.NOTE'
                 ).split(':')[0]
